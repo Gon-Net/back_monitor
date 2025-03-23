@@ -12,12 +12,16 @@
 Copy the lines marked.
 
  2. Install the libraries.
-
+    
+```bash
  composer install
+```
 
  3. Run the application.
 
+```bash
  php artisan serve
+```
 
 ## About Laravel
 
