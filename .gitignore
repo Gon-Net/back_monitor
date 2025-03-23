@@ -5,7 +5,6 @@
 /public/storage
 /storage/*.key
 /storage/pail
-/vendor
 .env
 .env.backup
 .env.production
@@ -24,9 +23,6 @@ yarn-error.log
 
 # Evitar que el archivo de entorno sea versionado
 .env
-
-# Directorio de dependencias de Composer
-/vendor
 
 # Directorio de dependencias de Node.js
 /node_modules
