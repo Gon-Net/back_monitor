@@ -6,6 +6,18 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
+ Fast Laravel
+ 1. Copy the .env.example to .env, then configure with your credentials.
+
+Copy the lines marked.
+
+ 2. Install the libraries.
+
+ composer install
+
+ 3. Run the application.
+
+ php artisan serve
 
 ## About Laravel
 

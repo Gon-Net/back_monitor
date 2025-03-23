@@ -14,7 +14,7 @@ class Observador extends Model
     protected $fillable = [
         'ubicacion_id', 
         'tipo_observador_id', 
-        'tipo_observador_categoria_id', 
+        'tipo_usuarioapk_id', 
         'nombre_observador', 
         'numero_documento_identidad', 
         'fecha_nacimiento', 
@@ -63,6 +63,6 @@ class Observador extends Model
  
      public function tipoObservadorCategoria()
      {
-         return $this->belongsTo(TipoObservadorCategoria::class, 'tipo_observador_categoria_id');
+         return $this->belongsTo(TipoObservadorCategoria::class, 'tipo_usuarioapk_id');
      }
 }
