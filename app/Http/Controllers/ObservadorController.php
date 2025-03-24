@@ -10,9 +10,11 @@ class ObservadorController extends Controller
 {
     public function getWithValues()
     {
-        $observadores = Observador::with(['ubicacion', 'tipoObservador', 'tipoObservadorCategoria'])->get();
-        
-        return response()->json($observadores, 200);
+        $observadoresFiltrados = ApiHelper::getAlloweds(Observador::class)->pluck('id');
+        $observadoresConRelaciones = Observador::whereIn('id', $observadoresFiltrados)
+            ->with(['ubicacion', 'tipoObservador', 'tipoObservadorCategoria'])
+            ->get();
+        return response()->json($observadoresConRelaciones, 200);
     }
     public function getAll()
     {
