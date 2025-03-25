@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ObservadorController;
 use App\Http\Controllers\PrecipitacionController;
+use App\Models\TipoFrecuencia;
 use App\Models\TipoObservador;
 use App\Models\TipoObservadorCategoria;
 use App\Models\Ubicacion;
@@ -35,6 +36,9 @@ Route::group(['prefix' => 'v1'], function () {
     });
     Route::get('/tipos_observadores_categoria', function () {
         return response()->json(ApiHelper::getAlloweds(TipoObservadorCategoria::class), 200);
+    });
+    Route::get('/tipos_frecuencia', function () {
+        return response()->json(ApiHelper::getAlloweds(TipoFrecuencia::class), 200);
     });
     Route::get('/', function () {
         return view('welcome');

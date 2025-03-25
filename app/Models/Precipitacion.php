@@ -31,6 +31,11 @@ class Precipitacion extends Model
         return $this->belongsTo(Observador::class, 'observador_id');
     }
 
+    public function tipo_frecuencia()
+    {
+        return $this->belongsTo(TipoFrecuencia::class, 'tipo_frecuencia_id');
+    }
+
     protected static function boot()
     {
         parent::boot();

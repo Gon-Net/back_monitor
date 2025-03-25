@@ -12,7 +12,7 @@ class PrecipitacionController extends Controller
     {
         $observadoresFiltrados = ApiHelper::getAlloweds(Precipitacion::class)->pluck('id');
         $observadoresConRelaciones = Precipitacion::whereIn('id', $observadoresFiltrados)
-            ->with(['ubicacion', 'observador'])
+            ->with(['ubicacion', 'observador', 'tipo_frecuencia'])
             ->get();
         return response()->json($observadoresConRelaciones, 200);
     }
