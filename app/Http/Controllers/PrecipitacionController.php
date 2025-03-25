@@ -10,7 +10,11 @@ class PrecipitacionController extends Controller
 {
     public function getAll()
     {
-        return response()->json(ApiHelper::getAlloweds(Precipitacion::class), 200);
+        $observadoresFiltrados = ApiHelper::getAlloweds(Precipitacion::class)->pluck('id');
+        $observadoresConRelaciones = Precipitacion::whereIn('id', $observadoresFiltrados)
+            ->with(['ubicacion', 'observador'])
+            ->get();
+        return response()->json($observadoresConRelaciones, 200);
     }
     public function store(Request $request)
     {
@@ -20,6 +24,7 @@ class PrecipitacionController extends Controller
                 'tipo_frecuencia_id' => 'required|numeric',
                 'intervalo' => 'required|in:INI,FIN',
                 'valor' => 'required|numeric',
+                'fecha_registro_precipitacion' => 'required|date',
                 'observador_id' => 'required|numeric',
             ]);
             $precipitacion = Precipitacion::create($validated);
@@ -42,6 +47,7 @@ class PrecipitacionController extends Controller
                 'tipo_frecuencia_id' => 'required',
                 'intervalo' => 'required|string|max:3',
                 'valor' => 'required|numeric',
+                'fecha_registro_precipitacion' => 'required|date',
                 'observador_id' => 'required|exists:observador,id',
             ]);
             $precipitacion = Precipitacion::findOrFail($id);

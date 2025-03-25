@@ -8,7 +8,7 @@ class Precipitacion extends Model
 {
     public $timestamps = false;
     protected $table = 'precipitacion';
-    protected $fillable = ['ubicacion_id', 'tipo_frecuencia_id', 'intervalo', 'valor', 'observador_id']; 
+    protected $fillable = ['ubicacion_id', 'tipo_frecuencia_id', 'intervalo', 'valor', 'observador_id', 'fecha_registro_precipitacion']; 
     protected $hidden = [
         'fecha_registro',
         'fecha_modificacion',
@@ -19,6 +19,16 @@ class Precipitacion extends Model
     protected $attributes = [
         'estado' => 'A',
     ];
+
+    public function ubicacion()
+    {
+        return $this->belongsTo(Ubicacion::class, 'ubicacion_id');
+    }
+
+    public function observador()
+    {
+        return $this->belongsTo(Observador::class, 'observador_id');
+    }
 
     protected static function boot()
     {
