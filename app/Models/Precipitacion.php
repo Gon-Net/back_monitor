@@ -9,8 +9,9 @@ class Precipitacion extends Model
     public $timestamps = false;
     protected $table = 'precipitacion';
     protected $fillable = ['ubicacion_id', 'tipo_frecuencia_id', 'intervalo', 'valor', 'observador_id', 'fecha_registro_precipitacion']; 
-    protected $hidden = [
-        'fecha_registro',
+
+    protected $hidden = [  
+        'fecha_registro',      
         'fecha_modificacion',
         'fecha_eliminacion',
         'estado',
