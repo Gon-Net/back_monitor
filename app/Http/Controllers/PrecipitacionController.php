@@ -8,9 +8,10 @@ use App\Helpers\ApiHelper;
 use Illuminate\Validation\ValidationException;
 class PrecipitacionController extends Controller
 {
-    public function getAll()
+    public function getAll(Request $request)
     {
-        $observadoresFiltrados = ApiHelper::getAlloweds(Precipitacion::class)->pluck('id');
+        $perPage = $request->input('items', 100);
+        $observadoresFiltrados = ApiHelper::getAlloweds(Precipitacion::class, $perPage)->pluck('id');
         $observadoresConRelaciones = Precipitacion::whereIn('id', $observadoresFiltrados)
             ->with(['ubicacion', 'observador', 'tipo_frecuencia'])
             ->get();

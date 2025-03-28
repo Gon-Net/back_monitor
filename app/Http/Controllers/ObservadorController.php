@@ -8,17 +8,19 @@ use App\Helpers\ApiHelper;
 use Illuminate\Validation\ValidationException;
 class ObservadorController extends Controller
 {
-    public function getWithValues()
+    public function getWithValues(Request $request)
     {
-        $observadoresFiltrados = ApiHelper::getAlloweds(Observador::class)->pluck('id');
+        $perPage = $request->input('items', 100);
+        $observadoresFiltrados = ApiHelper::getAlloweds(Observador::class, $perPage)->pluck('id');
         $observadoresConRelaciones = Observador::whereIn('id', $observadoresFiltrados)
             ->with(['ubicacion', 'tipoObservador', 'tipoObservadorCategoria'])
             ->get();
         return response()->json($observadoresConRelaciones, 200);
     }
-    public function getAll()
+    public function getAll(Request $request)
     {
-        return response()->json(ApiHelper::getAlloweds(Observador::class), 200);
+        $perPage = $request->input('items', 100);
+        return response()->json(ApiHelper::getAlloweds(Observador::class, $perPage), 200);
     }
     
     public function store(Request $request)

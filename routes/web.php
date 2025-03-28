@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ObservadorController;
 use App\Http\Controllers\PrecipitacionController;
+use App\Http\Controllers\EventoExtremoController;
+use App\Models\EventoExtremo;
 use App\Models\TipoFrecuencia;
 use App\Models\TipoObservador;
 use App\Models\TipoObservadorCategoria;
@@ -64,4 +66,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::put('/precipitaciones/{id}', [PrecipitacionController::class, 'update']);
     Route::delete('/precipitaciones/{id}', [PrecipitacionController::class, 'destroy']);
     
+    Route::get('/eventos-extremos', [EventoExtremoController::class, 'getAll']);
+    Route::post('/eventos-extremos', [EventoExtremoController::class, 'store']);
+    Route::put('/eventos-extremos/{id}', [EventoExtremoController::class, 'update']);
+    Route::delete('/eventos-extremos/{id}', [EventoExtremoController::class, 'destroy']);
 });

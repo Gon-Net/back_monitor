@@ -2,13 +2,11 @@
 
 namespace App\Helpers;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
 
 class ApiHelper
 {
-    public static function getAlloweds($model)
+    public static function getAlloweds($model, $perPage = 100)
     {
-        return $model::where('estado', 'A')->get();
+        return $model::where('estado', 'A')->simplePaginate($perPage);
     }
 }
