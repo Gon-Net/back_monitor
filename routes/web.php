@@ -67,6 +67,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::delete('/precipitaciones/{id}', [PrecipitacionController::class, 'destroy']);
     
     Route::get('/eventos-extremos', [EventoExtremoController::class, 'getAll']);
+    Route::get('/eventos-extremos/{id}', [EventoExtremoController::class, 'getOne']);
     Route::post('/eventos-extremos', [EventoExtremoController::class, 'store']);
     Route::put('/eventos-extremos/{id}', [EventoExtremoController::class, 'update']);
     Route::delete('/eventos-extremos/{id}', [EventoExtremoController::class, 'destroy']);

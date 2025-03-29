@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EventoExtremo extends Model
 {
+    public $timestamps = false;
     protected $table = 'evento_extremo';
     protected $fillable = [
         'ubicacion_id', 
@@ -18,9 +19,7 @@ class EventoExtremo extends Model
 
     protected $hidden = [
         'fecha_registro',
-        'estado',
-        'fecha_modificacion',
-        'fecha_eliminacion'
+        'estado'
     ];
 
     protected $attributes = [
@@ -28,24 +27,24 @@ class EventoExtremo extends Model
     ];
 
     public function tipo_intensidad_evento()
-     {
-         return $this->belongsTo(TipoIntensidadEvento::class, 'tipo_intensidad_evento_id');
-     }
+    {
+        return $this->belongsTo(TipoIntensidadEvento::class, 'tipo_intensidad_evento_id');
+    }
  
-     public function ubicacion()
-     {
-         return $this->belongsTo(Ubicacion::class, 'ubicacion_id');
-     }
+    public function ubicacion()
+    {
+        return $this->belongsTo(Ubicacion::class, 'ubicacion_id');
+    }
 
-     public function tipo_evento()
-     {
-         return $this->belongsTo(TipoEvento::class, 'tipo_evento_id');
-     }
+    public function tipo_evento()
+    {
+        return $this->belongsTo(TipoEvento::class, 'tipo_evento_id');
+    }
 
-     public function observador()
-     {
-         return $this->belongsTo(Observador::class, 'observador_id');
-     }
+    public function observador()
+    {
+        return $this->belongsTo(Observador::class, 'observador_id');
+    }
 
     protected static function boot()
     {

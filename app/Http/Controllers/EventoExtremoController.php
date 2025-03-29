@@ -17,6 +17,16 @@ class EventoExtremoController extends Controller
             ->get();
         return response()->json($extreme_events, 200);
     }
+    public function getOne($id)
+    {
+        $ubicacion = EventoExtremo::findOrFail($id);
+        if ($ubicacion->estado === 'B') {
+            return response()->json([
+                'message' => 'Evento extremo no disponible'
+            ], 404);
+        }
+        return response()->json($ubicacion, 200);
+    }
     public function store(Request $request)
     {
         try{
