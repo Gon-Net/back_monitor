@@ -37,6 +37,16 @@ class EventoExtremoController extends Controller
                 'numero_veces' => 'required|numeric',
                 'observacion' => 'required|string',
                 'observador_id' => 'required|exists:observador,id',
+                'fecha_registro_evento' => 'date',
+                'estado_cultivo_papa' => 'numeric',
+                'estado_cultivo_haba' => 'numeric',
+                'estado_cultivo_tomate' => 'numeric',
+                'estado_cultivo_cebolla' => 'numeric',
+                'estado_cultivo_maiz' => 'numeric',
+                'estado_cultivo_zanahoria' => 'numeric',
+                'estado_cultivo_durazno' => 'numeric',
+                'estado_cultivo_manzana' => 'numeric',
+                'otro_cultivo' => 'string'
             ]);
             $precipitacion = EventoExtremo::create($validated);
             return response()->json([
@@ -60,6 +70,16 @@ class EventoExtremoController extends Controller
                 'numero_veces' => 'required|numeric',
                 'observacion' => 'required|string',
                 'observador_id' => 'required|exists:observador,id',
+                'fecha_registro_evento' => 'date',
+                'estado_cultivo_papa' => 'numeric',
+                'estado_cultivo_haba' => 'numeric',
+                'estado_cultivo_tomate' => 'numeric',
+                'estado_cultivo_cebolla' => 'numeric',
+                'estado_cultivo_maiz' => 'numeric',
+                'estado_cultivo_zanahoria' => 'numeric',
+                'estado_cultivo_durazno' => 'numeric',
+                'estado_cultivo_manzana' => 'numeric',
+                'otro_cultivo' => 'string'
             ]);
             $extreme_evento = EventoExtremo::findOrFail($id);
             $extreme_evento->fill($validated);

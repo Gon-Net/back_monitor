@@ -14,6 +14,16 @@ class EventoExtremo extends Model
         'numero_veces', 
         'observacion', 
         'observador_id', 
+        'fecha_registro_evento',
+        'estado_cultivo_papa',
+        'estado_cultivo_haba',
+        'estado_cultivo_tomate',
+        'estado_cultivo_cebolla',
+        'estado_cultivo_maiz',
+        'estado_cultivo_zanahoria',
+        'estado_cultivo_durazno',
+        'estado_cultivo_manzana',
+        'otro_cultivo'
     ]; 
     
 
