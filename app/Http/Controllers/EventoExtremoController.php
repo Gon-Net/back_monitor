@@ -30,6 +30,23 @@ class EventoExtremoController extends Controller
     public function store(Request $request)
     {
         try{
+            $request->merge([
+                'ubicacion_id' => $request->get('ubicacion_id'),
+                'tipo_evento_id' => $request->get('tipo_evento_id'),
+                'tipo_intensidad_evento_id' => $request->get('tipo_intensidad_evento_id'),
+                'numero_veces' => $request->get('numero_veces'),
+                'observacion' => $request->get('observacion'),
+                'observador_id' => $request->get('observador_id'),
+                'fecha_registro_evento' => $request->get('fecha_registro_evento', now()),
+                'estado_cultivo_papa' => $request->get('estado_cultivo_papa', 0),
+                'estado_cultivo_haba' => $request->get('estado_cultivo_haba', 0),
+                'estado_cultivo_tomate' => $request->get('estado_cultivo_tomate', 0),
+                'estado_cultivo_cebolla' => $request->get('estado_cultivo_cebolla', 0),
+                'estado_cultivo_maiz' => $request->get('estado_cultivo_maiz', 0),
+                'estado_cultivo_zanahoria' => $request->get('estado_cultivo_zanahoria', 0),
+                'estado_cultivo_durazno' => $request->get('estado_cultivo_durazno', 0),
+                'estado_cultivo_manzana' => $request->get('estado_cultivo_manzana', 0),
+            ]);
             $validated = $request->validate([
                 'ubicacion_id' => 'required|exists:ubicacion,id',
                 'tipo_evento_id' => 'required|exists:tipo_evento,id',
@@ -63,6 +80,7 @@ class EventoExtremoController extends Controller
     public function update(Request $request, $id)
     {
         try{
+            
             $validated = $request->validate([
                 'ubicacion_id' => 'required|exists:ubicacion,id',
                 'tipo_evento_id' => 'required|exists:tipo_evento,id',
@@ -79,7 +97,7 @@ class EventoExtremoController extends Controller
                 'estado_cultivo_zanahoria' => 'numeric',
                 'estado_cultivo_durazno' => 'numeric',
                 'estado_cultivo_manzana' => 'numeric',
-                'otro_cultivo' => 'string'
+                'otro_cultivo' => 'nullable|string'
             ]);
             $extreme_evento = EventoExtremo::findOrFail($id);
             $extreme_evento->fill($validated);
