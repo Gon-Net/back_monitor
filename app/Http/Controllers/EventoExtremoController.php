@@ -11,10 +11,10 @@ class EventoExtremoController extends Controller
     public function getAll(Request $request)
     {
         $perPage = $request->input('items', 100);
-        $extreme_events_filtered = ApiHelper::getAlloweds(EventoExtremo::class, $perPage)->pluck('id');
+        $extreme_events_filtered = ApiHelper::getAlloweds(EventoExtremo::class, $perPage, true)->pluck('id');
         $extreme_events = EventoExtremo::whereIn('id', $extreme_events_filtered)
             ->with(['tipo_intensidad_evento', 'tipo_evento', 'observador', 'ubicacion'])
-            ->get();
+            ->paginate($perPage);
         return response()->json($extreme_events, 200);
     }
     public function getOne($id)

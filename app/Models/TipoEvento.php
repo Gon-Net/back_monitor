@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipoEvento extends Model
 {
-    protected $table = 'cultivo_producto';
+    protected $table = 'tipo_evento';
     protected $fillable = ['descripcion']; 
         protected $hidden = [
         'fecha_registro',

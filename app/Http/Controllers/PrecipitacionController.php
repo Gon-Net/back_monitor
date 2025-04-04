@@ -11,10 +11,10 @@ class PrecipitacionController extends Controller
     public function getAll(Request $request)
     {
         $perPage = $request->input('items', 100);
-        $observadoresFiltrados = ApiHelper::getAlloweds(Precipitacion::class, $perPage)->pluck('id');
+        $observadoresFiltrados = ApiHelper::getAlloweds(Precipitacion::class, $perPage, true)->pluck('id');
         $observadoresConRelaciones = Precipitacion::whereIn('id', $observadoresFiltrados)
             ->with(['ubicacion', 'observador', 'tipo_frecuencia'])
-            ->get();
+            ->paginate($perPage);
         return response()->json($observadoresConRelaciones, 200);
     }
     public function store(Request $request)
