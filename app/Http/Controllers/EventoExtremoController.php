@@ -63,7 +63,7 @@ class EventoExtremoController extends Controller
                 'estado_cultivo_zanahoria' => 'numeric',
                 'estado_cultivo_durazno' => 'numeric',
                 'estado_cultivo_manzana' => 'numeric',
-                'otro_cultivo' => 'string'
+                'otro_cultivo' => 'nullable|string'
             ]);
             $precipitacion = EventoExtremo::create($validated);
             return response()->json([
