@@ -22,7 +22,8 @@ class Observador extends Model
         'correo', 
         'nombre_usuario', 
         'dir_documento_identidad', 
-        'dir_acta_nombramiento'
+        'dir_acta_nombramiento',
+        'comunidad_aledania'
     ]; 
     
 

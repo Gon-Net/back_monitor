@@ -37,7 +37,8 @@ class ObservadorController extends Controller
                 'correo' => 'required|email',
                 'nombre_usuario' => 'required|string|max:255',
                 'dir_documento_identidad' => 'nullable|file|mimes:jpg,png|max:2048', 
-                'dir_acta_nombramiento' => 'nullable|file|mimes:jpg,png|max:2048'
+                'dir_acta_nombramiento' => 'nullable|file|mimes:jpg,png|max:2048',
+                'comunidad_aledania' => 'nullable|string|max:100'
             ]);
 
             if ($request->hasFile('dir_documento_identidad')) {
@@ -83,6 +84,7 @@ class ObservadorController extends Controller
                 'nombre_usuario' => 'string|max:255',
                 'dir_documento_identidad' => 'nullable|file|mimes:jpg,png|max:2048',
                 'dir_acta_nombramiento' => 'nullable|file|mimes:jpg,png|max:2048',
+                'comunidad_aledania' => 'nullable|string|max:100'
             ]);
             $observador = Observador::findOrFail($id);
 
@@ -113,6 +115,9 @@ class ObservadorController extends Controller
             }
             if (isset($validated['nombre_usuario'])) {
                 $observador->nombre_usuario = $validated['nombre_usuario'];
+            }
+            if (isset($validated['comunidad_aledania'])) {
+                $observador->comunidad_aledania = $validated['comunidad_aledania'];
             }
             $observador->update($validated);
             
@@ -145,6 +150,7 @@ class ObservadorController extends Controller
                 'dir_documento_identidad' => 'nullable|file|mimes:jpg,png|max:2048',
                 'dir_acta_nombramiento' => 'nullable|file|mimes:jpg,png|max:2048',
                 'fotos_adicionales.*' => 'nullable|file|mimes:jpg,png|max:2048', // Validar múltiples fotos
+                'comunidad_aledania' => 'nullable|string|max:100'
             ]);
 
             // Buscar el observador por su ID

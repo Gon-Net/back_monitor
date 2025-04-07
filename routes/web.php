@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MicroEstacionController;
 use App\Http\Controllers\ObservadorController;
 use App\Http\Controllers\PrecipitacionController;
 use App\Http\Controllers\EventoExtremoController;
-use App\Models\EventoExtremo;
+use App\Http\Controllers\MemController;
 use App\Models\TipoFrecuencia;
 use App\Models\TipoObservador;
 use App\Models\TipoObservadorCategoria;
@@ -71,4 +72,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('/eventos-extremos', [EventoExtremoController::class, 'store']);
     Route::put('/eventos-extremos/{id}', [EventoExtremoController::class, 'update']);
     Route::delete('/eventos-extremos/{id}', [EventoExtremoController::class, 'destroy']);
+
+    Route::get('/microestacion', [MicroEstacionController::class, 'getAll']);
+
+    Route::get('/mem', [MemController::class, 'getAll']);
+    Route::get('/migrate', [MemController::class, 'migrate']);
 });
