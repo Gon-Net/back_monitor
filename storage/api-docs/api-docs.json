@@ -1,0 +1,47 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Mi API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/v1/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Login the app",
+                "operationId": "7abb047ced1329103f0767160e852fc9",
+                "responses": {
+                    "201": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/v1/departamentos": {
+            "get": {
+                "tags": [
+                    "Departamentos"
+                ],
+                "summary": "Obtener departamentos",
+                "operationId": "5b474eab6bab6d5a88d9b9823a12adf8",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Login",
+            "description": "Login"
+        },
+        {
+            "name": "Departamentos",
+            "description": "Departamentos"
+        }
+    ]
+}

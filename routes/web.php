@@ -1,66 +1,50 @@
 <?php
-
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DepartamentosController;
+use App\Http\Controllers\EventoExtremoController;
+use App\Http\Controllers\MemController;
 use App\Http\Controllers\MicroEstacionController;
 use App\Http\Controllers\ObservadorController;
 use App\Http\Controllers\PrecipitacionController;
-use App\Http\Controllers\EventoExtremoController;
-use App\Http\Controllers\MemController;
-use App\Models\TipoFrecuencia;
-use App\Models\TipoObservador;
-use App\Models\TipoObservadorCategoria;
-use App\Models\Ubicacion;
-use Illuminate\Support\Facades\Route;
-use App\Models\Departamento;
-use App\Helpers\ApiHelper;
+use App\Http\Controllers\TipoObservadoresController;
+use App\Http\Controllers\TiposFrecuenciaController;
+use App\Http\Controllers\TiposObservadoresCategoriaController;
+use App\Http\Controllers\UbicacionesController;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1'], function () {
-    Route::get('/departamentos', function () {
-        return response()->json(ApiHelper::getAlloweds(Departamento::class), 200);
-    });
-    
-    Route::get('/ubicaciones', function () {
-        return response()->json(ApiHelper::getAlloweds(Ubicacion::class), 200);
-    });
-    
-    Route::get('/ubicaciones/{id}', function ($id) {
-        $ubicacion = Ubicacion::findOrFail($id);
-        if ($ubicacion->estado === 'B') {
-            return response()->json([
-                'message' => 'Observador no disponible'
-            ], 404);
-        }
-        return response()->json($ubicacion, 200);
-    });
-    
-    Route::get('/tipos_observadores', function () {
-        return response()->json(ApiHelper::getAlloweds(TipoObservador::class), 200);
-    });
-    Route::get('/tipos_observadores_categoria', function () {
-        return response()->json(ApiHelper::getAlloweds(TipoObservadorCategoria::class), 200);
-    });
-    Route::get('/tipos_frecuencia', function () {
-        return response()->json(ApiHelper::getAlloweds(TipoFrecuencia::class), 200);
-    });
     Route::get('/', function () {
-        return view('welcome');
+        return "BIENVENIDO";
     });
     
     Route::get('/token', function () {
         return csrf_token(); 
     });
-    
+
+    Route::get('/phpinfo', function () {
+        phpinfo();
+    });
+
+    Route::get('/departamentos', [DepartamentosController::class, 'getAll']);
+    Route::get('/tipos_frecuencia', [TiposFrecuenciaController::class, 'getAll']);
+    Route::get('/tipos_observadores_categoria', [TiposObservadoresCategoriaController::class, 'getAll']);
+    Route::get('/tipos_observadores', [TipoObservadoresController::class, 'getAll']);
+    Route::get('/ubicaciones', [UbicacionesController::class, 'getAll']);
+    Route::get('/ubicaciones/{id}', [UbicacionesController::class, 'getOne']);
+
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
     
     Route::get('/observadores', [ObservadorController::class, 'getAll']);
     Route::get('/observadores_completo', [ObservadorController::class, 'getWithValues']);
+
     Route::post('/observadores', [ObservadorController::class, 'store']);
     Route::put('/observadores/{id}', [ObservadorController::class, 'update']);
+
     Route::put('/observadores_files/{id}', [ObservadorController::class, 'update_with_files']);
+
     Route::delete('/observadores/{id}', [ObservadorController::class, 'destroy']);
-    
     
     Route::get('/precipitaciones', [PrecipitacionController::class, 'getAll']);
     Route::post('/precipitaciones', [PrecipitacionController::class, 'store']);
@@ -77,4 +61,6 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('/mem', [MemController::class, 'getAll']);
     Route::get('/migrate', [MemController::class, 'migrate']);
+    Route::get('/migrate-station-day', [MemController::class, 'migratePerDay']);
+    Route::get('/migrate-day', [MemController::class, 'migratePerDate']);
 });

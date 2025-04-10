@@ -11,7 +11,7 @@ class ObservadorController extends Controller
     public function getWithValues(Request $request)
     {
         $perPage = $request->input('items', 100);
-        $observadoresFiltrados = ApiHelper::getAlloweds(Observador::class, $perPage, true)->pluck('id');
+        $observadoresFiltrados = ApiHelper::getAlloweds(Observador::class, all: true)->pluck('id');
         $observadoresConRelaciones = Observador::whereIn('id', $observadoresFiltrados)
             ->with(['ubicacion', 'tipoObservador', 'tipoObservadorCategoria'])
             ->paginate($perPage);

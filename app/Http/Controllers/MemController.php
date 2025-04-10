@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Mem;
+use App\Models\MicroEstacion;
 use Illuminate\Http\Request;
 use App\Helpers\ApiHelper;
 use Illuminate\Support\Facades\Http;
@@ -89,7 +90,7 @@ class MemController extends Controller
             throw $e;
         }
     }
-    private function migrate_per_station_and_date($station_id, $date)
+    private function migratePerStationAndDate($station_id, $date)
     {
         try {
             $response = Http::withHeaders([
@@ -114,7 +115,7 @@ class MemController extends Controller
             throw $e;
         }
     }
-    public function migrate_per_day(Request $request)
+    public function migratePerDay(Request $request)
     {
         $station_id = $request->input('estacion');
         $date = $request->input('fecha');
@@ -125,7 +126,7 @@ class MemController extends Controller
             return response()->json(['error' => 'Debes agregar una fecha'], 400);
         }
         try {
-            $count = MemController::migrate_per_station_and_date($station_id, $date);
+            $count = MemController::migratePerStationAndDate($station_id, $date);
             return response()->json([
                 'exito' => "Se creo {$count} nuevos elementos."
             ], 201);
@@ -150,12 +151,40 @@ class MemController extends Controller
             }
             foreach($stations_id as $station_id){
                 foreach($dates as $date){
-                    $count = $count + MemController::migrate_per_station_and_date($station_id, $date);
+                    $count = $count + MemController::migratePerStationAndDate($station_id, $date);
                 }
             }
             return $count;
         } catch (\Exception $e) {
             throw $e;
+        }
+    }
+    public function migratePerDate($date)
+    {
+        try {
+            $count = 0;
+            $stations_id = ApiHelper::getAlloweds(MicroEstacion::class, all: true)->pluck('id');
+            foreach($stations_id as $station_id){
+                $count = $count + MemController::migratePerStationAndDate($station_id, $date);
+            }
+            return $count;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+    public function migrateOneDay($request)
+    {
+        $date = $request->input('fecha') ?? now();
+        try {
+            $count = MemController::migratePerDate($date);
+            return response()->json([
+                'exito' => "Se creo {$count} nuevos elementos."
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al crear.',
+                'errors' => $e->getMessage(),
+            ], 404);
         }
     }
     public function migrate()

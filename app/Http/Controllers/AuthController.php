@@ -7,8 +7,21 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use OpenApi\Annotations as OA;
+#php artisan l5-swagger:generate
 class AuthController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/v1/login",
+     *     summary="Login the app",
+     *     tags={"Login"},
+     *     @OA\Response(
+     *         response=201,
+     *         description="Success"
+     *     )
+     * )
+     */
     public function login(Request $request)
     {
         try {
