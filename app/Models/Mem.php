@@ -8,6 +8,7 @@ class Mem extends Model
 {
     public $timestamps = false;
     protected $table = 'mem_dato_fecha';
+
     protected $fillable = [
         'id_pem',
         'fecha',
@@ -25,11 +26,32 @@ class Mem extends Model
         'fecha_modificacion',
         'fecha_eliminacion',
         'estado',
+        'microestacion'
     ];
 
     protected $attributes = [
         'estado' => 'A',
     ];
+
+    protected $appends = ['lugar_pem', 'latitud_pem', 'longitud_pem'];
+
+    public function microestacion()
+    {
+        return $this->belongsTo(MicroEstacion::class, 'id_pem');
+    }
+
+    public function getLugarPemAttribute()
+    {
+        return $this->microestacion->lugar_pem ?? '';
+    }
+    public function getLatitudPemAttribute()
+    {
+        return $this->microestacion->latitud ?? null;
+    }
+    public function getLongitudPemAttribute()
+    {
+        return $this->microestacion->longitud ?? null;
+    }
     protected static function boot()
     {
         parent::boot();
@@ -47,3 +69,4 @@ class Mem extends Model
         });
     }
 }
+

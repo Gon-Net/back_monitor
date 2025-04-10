@@ -3,6 +3,9 @@
 use Illuminate\Foundation\Console\ClosureCommand;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
+
+Schedule::command('app:migrate-mems')->everyMinute();
 
 Artisan::command('inspire', function () {
     /** @var ClosureCommand $this */

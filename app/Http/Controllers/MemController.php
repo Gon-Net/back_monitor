@@ -12,11 +12,11 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 class MemController extends Controller
 {
-    private function store(Request $request)
+    public function store(Request $request)
     {
         try{
             $validated = $request->validate([
-                'id_pem' => 'required|numeric',
+                'id_pem' => 'required|exists:microestacion,id',
                 'fecha' => 'required|date',
                 'hora' => 'required|numeric',
                 'temperatura' => 'required|numeric',
@@ -62,7 +62,7 @@ class MemController extends Controller
         DB::beginTransaction();
         try {
             $rules = [
-                'id_pem' => 'required|numeric',
+                'id_pem' => 'required|exists:microestacion,id',
                 'fecha' => 'required|date',
                 'hora' => 'required|numeric',
                 'temperatura' => 'required|numeric',
@@ -136,8 +136,7 @@ class MemController extends Controller
             ], 404);
         }
     }
-    
-    public function migrate()
+    public function migrate_all()
     {
         try {
             $count = 0;
@@ -154,6 +153,15 @@ class MemController extends Controller
                     $count = $count + MemController::migrate_per_station_and_date($station_id, $date);
                 }
             }
+            return $count;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+    public function migrate()
+    {
+        try {
+            $count = MemController::migrate_all();
             return response()->json([
                 'exito' => "Se creo {$count} nuevos elementos."
             ], 201);
@@ -167,6 +175,12 @@ class MemController extends Controller
     public function getAll(Request $request)
     {
         $perPage = $request->input('items', 100);
-        return response()->json(ApiHelper::getAlloweds(Mem::class, $perPage), 200);
+        $mems_filtered = ApiHelper::getAlloweds(Mem::class, $perPage)->pluck('id');
+        $mems = Mem::whereIn('id', $mems_filtered)
+            ->with(['microestacion'])
+            ->paginate($perPage);
+        return response()->json($mems, 200);
+
+
     }
 }
