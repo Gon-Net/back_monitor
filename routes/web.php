@@ -38,6 +38,7 @@ Route::group(['prefix' => 'v1'], function () {
     
     Route::get('/observadores', [ObservadorController::class, 'getAll']);
     Route::get('/observadores_completo', [ObservadorController::class, 'getWithValues']);
+    Route::post('/observadores-buscar', [ObservadorController::class, 'findObservador']);
 
     Route::post('/observadores', [ObservadorController::class, 'store']);
     Route::put('/observadores/{id}', [ObservadorController::class, 'update']);

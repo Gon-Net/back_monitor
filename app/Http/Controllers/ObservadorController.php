@@ -10,9 +10,21 @@ class ObservadorController extends Controller
 {
     public function getWithValues(Request $request)
     {
+        $ubicacion_id = $request->input('ubicacion_id');
+        $tipo_observador_id = $request->input('tipo_observador_id');
+
         $perPage = $request->input('items', 100);
         $observadoresFiltrados = ApiHelper::getAlloweds(Observador::class, all: true)->pluck('id');
-        $observadoresConRelaciones = Observador::whereIn('id', $observadoresFiltrados)
+        $observadores = Observador::whereIn('id', $observadoresFiltrados);
+        
+        if ($ubicacion_id !== null){
+            $observadores = $observadores->where('ubicacion_id', $ubicacion_id);
+        }
+        if ($tipo_observador_id !== null){
+            $observadores = $observadores->where('tipo_observador_id', $tipo_observador_id);
+        }
+
+        $observadoresConRelaciones = $observadores
             ->with(['ubicacion', 'tipoObservador', 'tipoObservadorCategoria'])
             ->paginate($perPage);
         return response()->json($observadoresConRelaciones, 200);
@@ -128,6 +140,39 @@ class ObservadorController extends Controller
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Error al actualizar.',
+                'errors' => $e->errors(),
+            ], 404);
+        }
+    }
+    public function findObservador(Request $request)
+    {
+        $name = $request->get('nombre_usuario');
+        $ndi = $request->get('numero_documento_identidad');
+
+        try{
+            $observador = Observador::where('nombre_usuario', $name)
+                ->where('numero_documento_identidad', $ndi)
+                ->first();
+            if ($observador === null){
+                return response()->json([
+                    'message' => 'Observador no encontrado'
+                ], 404);
+            }
+            if ($observador->estado === 'B') {
+                return response()->json([
+                    'message' => 'Ubicacion no disponible'
+                ], 404);
+            }
+        return response()->json([
+            'id' => $observador->id,
+            'ubicacion_id' => $observador->ubicacion_id,
+            'tipo_observador_id' => $observador->tipo_observador_id,
+            'tipo_usuarioapk_id' => $observador->tipo_usuarioapk_id,
+            'nombre_usuario' => $observador->nombre_usuario
+        ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Error al encontrar',
                 'errors' => $e->errors(),
             ], 404);
         }
