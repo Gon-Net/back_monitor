@@ -53,6 +53,7 @@ Thumbs.db
 # Archivos compilados
 /public/hot
 /public/storage
+/public/uploads
 /public/*.map
 
 # Otros archivos y directorios que pueden ser ignorados
