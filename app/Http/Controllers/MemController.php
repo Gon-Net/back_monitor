@@ -17,7 +17,7 @@ class MemController extends Controller
     {
         try{
             $validated = $request->validate([
-                'id_pem' => 'required|exists:microestacion,id',
+                'id_pem' => 'required|exists:microestacion,id_pem',
                 'fecha' => 'required|date',
                 'hora' => 'required|numeric',
                 'temperatura' => 'required|numeric',
@@ -63,7 +63,7 @@ class MemController extends Controller
         DB::beginTransaction();
         try {
             $rules = [
-                'id_pem' => 'required|exists:microestacion,id',
+                'id_pem' => 'required|exists:microestacion,id_pem',
                 'fecha' => 'required|date',
                 'hora' => 'required|numeric',
                 'temperatura' => 'required|numeric',
@@ -172,7 +172,7 @@ class MemController extends Controller
             throw $e;
         }
     }
-    public function migrateOneDay($request)
+    public function migrateOneDay(Request $request)
     {
         $date = $request->input('fecha') ?? now();
         try {

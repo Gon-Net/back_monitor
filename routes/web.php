@@ -63,5 +63,5 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/mem', [MemController::class, 'getAll']);
     Route::get('/migrate', [MemController::class, 'migrate']);
     Route::get('/migrate-station-day', [MemController::class, 'migratePerDay']);
-    Route::get('/migrate-day', [MemController::class, 'migratePerDate']);
+    Route::get('/migrate-day', [MemController::class, 'migrateOneDay']);
 });
