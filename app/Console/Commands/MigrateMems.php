@@ -23,23 +23,46 @@ class MigrateMems extends Command
      */
     protected $description = 'Command description';
 
+    private function log_text($text)
+    {
+        file_put_contents(
+            storage_path('logs/migrate-mems.log'),
+            mb_convert_encoding($text. "\n", 'UTF-8'),
+            FILE_APPEND
+        );
+    }
     /**
      * Execute the console command.
      */
-    public function handle()
+    private function migrate($number_try = 1)
     {
-
         $controller = new MemController();
         $today = now();
         $count = 0;
-        echo "Migración de MEMs ejecutada a las {$today}";
+        $this->log_text("Migración de MEMs ejecutada a las {$today}, intento $number_try/4\n");
+
         try{
             $count = $controller->migratePerDate(date('Y-m-d', strtotime('yesterday')));
-            echo "Se migraron nuevos {$count} MEMs";
+            $this->log_text("Migracion exitosa, se migro {$count} nuevos MEMs \n\n");
+            return true;
         }
         catch (\Exception $e) {
-            echo 'Error al migrar';
-            echo $e->getMessage();
+            $this->log_text("Error al migrar \n");
+            $this->log_text($e->getMessage());
+            if ($number_try === 4)
+            {
+                echo "No se pudo realizar la migracion \n";
+                return false;
+            }
+            else
+            {
+                return $this->migrate($number_try + 1);
+            }
         }
+    }
+    public function handle()
+    {
+        $this->log_text("---------------------");
+        $this->migrate(1);
     }
 }
