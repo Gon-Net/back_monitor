@@ -42,8 +42,9 @@ class MigrateMems extends Command
         $this->log_text("Migración de MEMs ejecutada a las {$today}, intento $number_try/4\n");
 
         try{
-            $count = $controller->migratePerDate(date('Y-m-d', strtotime('yesterday')));
-            $this->log_text("Migracion exitosa, se migro {$count} nuevos MEMs \n\n");
+            $date_migration = date('Y-m-d', strtotime('yesterday'));
+            $count = $controller->migratePerDate($date_migration);
+            $this->log_text("Migracion exitosa, se migro $count nuevos MEMs del dia $date_migration\n\n");
             return true;
         }
         catch (\Exception $e) {
