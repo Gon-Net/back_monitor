@@ -26,7 +26,8 @@ yarn-error.log
 .env
 
 # Directorio de dependencias de Composer
-/vendor/
+./vendor/
+composer.lock
 
 # Directorio de dependencias de Node.js
 /node_modules

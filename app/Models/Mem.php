@@ -37,7 +37,7 @@ class Mem extends Model
 
     public function microestacion()
     {
-        return $this->belongsTo(MicroEstacion::class, 'id_pem');
+        return $this->belongsTo(MicroEstacion::class, 'id_pem', 'id_pem');
     }
 
     public function getLugarPemAttribute()

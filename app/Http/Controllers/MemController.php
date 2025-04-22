@@ -206,12 +206,15 @@ class MemController extends Controller
     public function getAll(Request $request)
     {
         $perPage = $request->input('items', 100);
-        $mems_filtered = ApiHelper::getAlloweds(Mem::class, $perPage)->pluck('id');
-        $mems = Mem::whereIn('id', $mems_filtered)
+        $page = $request->input('page', 1);
+        
+        $allowedIds = ApiHelper::getAlloweds(Mem::class, $perPage,true)->pluck('id');
+        
+        $mems = Mem::whereIn('id', $allowedIds)
             ->with(['microestacion'])
-            ->paginate($perPage);
+            ->paginate($perPage, ['*'], 'page', $page);
+        
         return response()->json($mems, 200);
-
-
     }
+        
 }
