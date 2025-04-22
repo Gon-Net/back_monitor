@@ -10,12 +10,20 @@ class PrecipitacionController extends Controller
 {
     public function getAll(Request $request)
     {
+        $ubicacion_id = $request->input('ubicacion_id');
+
         $perPage = $request->input('items', 100);
-        $observadoresFiltrados = ApiHelper::getAlloweds(Precipitacion::class, $perPage, true)->pluck('id');
-        $observadoresConRelaciones = Precipitacion::whereIn('id', $observadoresFiltrados)
+
+        $precipitationsFiltered = ApiHelper::getAlloweds(Precipitacion::class, $perPage)->pluck('id');
+        $precipitations = Precipitacion::whereIn('id', $precipitationsFiltered);
+        if ($ubicacion_id !== null){
+            $precipitations = $precipitations->where('ubicacion_id', $ubicacion_id);
+        }
+
+        $precipitationsComplete = $precipitations
             ->with(['ubicacion', 'observador', 'tipo_frecuencia'])
             ->paginate($perPage);
-        return response()->json($observadoresConRelaciones, 200);
+        return response()->json($precipitationsComplete, 200);
     }
     public function store(Request $request)
     {

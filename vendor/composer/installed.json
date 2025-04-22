@@ -727,7 +727,7 @@
             },
             "time": "2024-11-21T13:46:39+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Faker\\": "src/Faker/"
@@ -789,7 +789,7 @@
                     "dev-master": "2.7-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Whoops\\": "src/Whoops/"
@@ -1424,7 +1424,7 @@
                     "dev-master": "2.1-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "hamcrest"
@@ -1709,7 +1709,7 @@
                     "dev-main": "1.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Laravel\\Pail\\": "src/"
@@ -1779,7 +1779,7 @@
                 "builds/pint"
             ],
             "type": "project",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "App\\": "app/",
@@ -1913,7 +1913,7 @@
                     ]
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Laravel\\Sail\\": "src/"
@@ -2142,17 +2142,17 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.6.1",
-            "version_normalized": "2.6.1.0",
+            "version": "2.6.2",
+            "version_normalized": "2.6.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "d990688c91cedfb69753ffc2512727ec646df2ad"
+                "reference": "06c3b0bf2540338094575612f4a1778d0d2d5e94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/d990688c91cedfb69753ffc2512727ec646df2ad",
-                "reference": "d990688c91cedfb69753ffc2512727ec646df2ad",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/06c3b0bf2540338094575612f4a1778d0d2d5e94",
+                "reference": "06c3b0bf2540338094575612f4a1778d0d2d5e94",
                 "shasum": ""
             },
             "require": {
@@ -2186,14 +2186,14 @@
             "suggest": {
                 "symfony/yaml": "v2.3+ required if using the Front Matter extension"
             },
-            "time": "2024-12-29T14:10:59+00:00",
+            "time": "2025-04-18T21:09:27+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-main": "2.7-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "League\\CommonMark\\": "src"
@@ -2741,7 +2741,7 @@
             },
             "time": "2024-05-16T03:13:13+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "files": [
                     "library/helpers.php",
@@ -2934,7 +2934,7 @@
             },
             "time": "2025-02-12T12:17:51+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "files": [
                     "src/DeepCopy/deep_copy.php"
@@ -3340,7 +3340,7 @@
                     "dev-8.x": "8.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "files": [
                     "./src/Adapters/Phpunit/Autoload.php"
@@ -3513,7 +3513,7 @@
                     "dev-master": "2.0.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -3573,7 +3573,7 @@
             },
             "time": "2022-02-21T01:04:05+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -3729,7 +3729,7 @@
                     "dev-main": "11.0.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -3794,7 +3794,7 @@
                     "dev-main": "5.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -3862,7 +3862,7 @@
                     "dev-main": "5.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -3925,7 +3925,7 @@
                     "dev-main": "4.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -3988,7 +3988,7 @@
                     "dev-main": "7.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -4079,7 +4079,7 @@
                     "dev-main": "11.5-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "files": [
                     "src/Framework/Assert/Functions.php"
@@ -4946,7 +4946,7 @@
                     "dev-main": "3.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5006,7 +5006,7 @@
                     "dev-main": "3.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5066,7 +5066,7 @@
                     "dev-main": "4.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5132,7 +5132,7 @@
                     "dev-main": "6.3-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5209,7 +5209,7 @@
                     "dev-main": "4.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5270,7 +5270,7 @@
                     "dev-main": "6.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5342,7 +5342,7 @@
                     "dev-main": "7.2-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5408,7 +5408,7 @@
                     "dev-main": "6.1-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5490,7 +5490,7 @@
                     "dev-main": "7.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5553,7 +5553,7 @@
                     "dev-main": "3.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5615,7 +5615,7 @@
                     "dev-main": "6.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5674,7 +5674,7 @@
                     "dev-main": "4.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5733,7 +5733,7 @@
                     "dev-main": "6.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5800,7 +5800,7 @@
                     "dev-main": "5.1-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5857,7 +5857,7 @@
                     "dev-main": "5.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -5918,7 +5918,7 @@
             },
             "time": "2024-10-20T05:08:20+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "lib/"
@@ -5946,22 +5946,22 @@
         },
         {
             "name": "swagger-api/swagger-ui",
-            "version": "v5.20.7",
-            "version_normalized": "5.20.7.0",
+            "version": "v5.21.0",
+            "version_normalized": "5.21.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swagger-api/swagger-ui.git",
-                "reference": "1c0f094653c70d6a69dc652d3713905d924ae916"
+                "reference": "fceaec605072fbc717a04895bd19814d9a1c8e6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swagger-api/swagger-ui/zipball/1c0f094653c70d6a69dc652d3713905d924ae916",
-                "reference": "1c0f094653c70d6a69dc652d3713905d924ae916",
+                "url": "https://api.github.com/repos/swagger-api/swagger-ui/zipball/fceaec605072fbc717a04895bd19814d9a1c8e6d",
+                "reference": "fceaec605072fbc717a04895bd19814d9a1c8e6d",
                 "shasum": ""
             },
-            "time": "2025-04-07T07:35:32+00:00",
+            "time": "2025-04-13T19:37:38+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
@@ -6004,7 +6004,7 @@
             ],
             "support": {
                 "issues": "https://github.com/swagger-api/swagger-ui/issues",
-                "source": "https://github.com/swagger-api/swagger-ui/tree/v5.20.7"
+                "source": "https://github.com/swagger-api/swagger-ui/tree/v5.21.0"
             },
             "install-path": "../swagger-api/swagger-ui"
         },
@@ -8418,7 +8418,7 @@
             },
             "time": "2024-03-03T12:36:25+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src/"
@@ -8733,17 +8733,17 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "5.0.7",
-            "version_normalized": "5.0.7.0",
+            "version": "5.1.0",
+            "version_normalized": "5.1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "18457fa71f753cfd4a2b21916baf329864fdfaa6"
+                "reference": "a9b953c25f5bd11ea0542636936de04504496bd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/18457fa71f753cfd4a2b21916baf329864fdfaa6",
-                "reference": "18457fa71f753cfd4a2b21916baf329864fdfaa6",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/a9b953c25f5bd11ea0542636936de04504496bd9",
+                "reference": "a9b953c25f5bd11ea0542636936de04504496bd9",
                 "shasum": ""
             },
             "require": {
@@ -8770,7 +8770,7 @@
             "suggest": {
                 "doctrine/annotations": "^2.0"
             },
-            "time": "2025-03-19T03:31:11+00:00",
+            "time": "2025-04-18T00:35:12+00:00",
             "bin": [
                 "bin/openapi"
             ],
@@ -8780,7 +8780,7 @@
                     "dev-master": "5.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "OpenApi\\": "src"
@@ -8806,8 +8806,8 @@
                     "homepage": "https://radebatz.net"
                 }
             ],
-            "description": "swagger-php - Generate interactive documentation for your RESTful API using phpdoc annotations",
-            "homepage": "https://github.com/zircote/swagger-php/",
+            "description": "Generate interactive documentation for your RESTful API using PHP attributes (preferred) or PHPDoc annotations",
+            "homepage": "https://github.com/zircote/swagger-php",
             "keywords": [
                 "api",
                 "json",
@@ -8816,7 +8816,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/5.0.7"
+                "source": "https://github.com/zircote/swagger-php/tree/5.1.0"
             },
             "install-path": "../zircote/swagger-php"
         }

@@ -31,14 +31,15 @@ class MigrateMems extends Command
 
         $controller = new MemController();
         $today = now();
-        $this->info("Migración de MEMs ejecutada a las {$today}");
+        $count = 0;
+        echo "Migración de MEMs ejecutada a las {$today}";
         try{
-            $count = $controller->migrate_all();
-            $this->info("Se migraron nuevos {$count} MEMs");
+            $count = $controller->migratePerDate(date('Y-m-d', strtotime('yesterday')));
+            echo "Se migraron nuevos {$count} MEMs";
         }
         catch (\Exception $e) {
-            $this->error('Error al migrar');
-            $this->error($e->getMessage());
+            echo 'Error al migrar';
+            echo $e->getMessage();
         }
     }
 }

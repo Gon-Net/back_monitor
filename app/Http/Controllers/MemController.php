@@ -20,11 +20,11 @@ class MemController extends Controller
                 'id_pem' => 'required|exists:microestacion,id_pem',
                 'fecha' => 'required|date',
                 'hora' => 'required|numeric',
-                'temperatura' => 'required|numeric',
+                'temperatura' => 'nullable|numeric',
                 'humedad' => 'required|numeric',
                 'presion' => 'required|numeric',
                 'uv' => 'required|numeric',
-                'precipitacion_tipo' => 'required|string',
+                'precipitacion_tipo' => 'nullable|string',
                 'precipitacion_probabilidad' => 'required|numeric',
                 'precipitacion' => 'required|numeric'
             ]);
@@ -66,11 +66,11 @@ class MemController extends Controller
                 'id_pem' => 'required|exists:microestacion,id_pem',
                 'fecha' => 'required|date',
                 'hora' => 'required|numeric',
-                'temperatura' => 'required|numeric',
+                'temperatura' => 'nullable|numeric',
                 'humedad' => 'required|numeric',
                 'presion' => 'required|numeric',
                 'uv' => 'required|numeric',
-                'precipitacion_tipo' => 'required|string',
+                'precipitacion_tipo' => 'nullable|string',
                 'precipitacion_probabilidad' => 'required|numeric',
                 'precipitacion' => 'required|numeric'
             ];
@@ -141,7 +141,7 @@ class MemController extends Controller
     {
         try {
             $count = 0;
-            $stations_id = array(4,5, 6);
+            $stations_id = ApiHelper::getAlloweds(MicroEstacion::class, all: true)->pluck('id_pem');
             $init = Carbon::create(2025, 4, 3);
             $now = Carbon::now();
             $periods = CarbonPeriod::create($init, '1 day', $now);
@@ -159,11 +159,13 @@ class MemController extends Controller
             throw $e;
         }
     }
+
+    
     public function migratePerDate($date)
     {
         try {
             $count = 0;
-            $stations_id = ApiHelper::getAlloweds(MicroEstacion::class, all: true)->pluck('id');
+            $stations_id = ApiHelper::getAlloweds(MicroEstacion::class, all: true)->pluck('id_pem');
             foreach($stations_id as $station_id){
                 $count = $count + MemController::migratePerStationAndDate($station_id, $date);
             }
