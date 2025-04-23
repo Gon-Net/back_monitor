@@ -12,6 +12,7 @@ use App\Http\Controllers\TiposObservadoresCategoriaController;
 use App\Http\Controllers\UbicacionesController;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\AuthenticateSanctum;
 
 Route::group(['prefix' => 'v1'], function () {
     Route::get('/', function () {
@@ -26,14 +27,19 @@ Route::group(['prefix' => 'v1'], function () {
         phpinfo();
     });
 
+    Route::get('/login', function(){
+        return AuthenticateSanctum::no_logged();
+    });
+
     Route::get('/departamentos', [DepartamentosController::class, 'getAll']);
     Route::get('/tipos_frecuencia', [TiposFrecuenciaController::class, 'getAll']);
     Route::get('/tipos_observadores_categoria', [TiposObservadoresCategoriaController::class, 'getAll']);
     Route::get('/tipos_observadores', [TipoObservadoresController::class, 'getAll']);
+    
     Route::get('/ubicaciones', [UbicacionesController::class, 'getAll']);
     Route::get('/ubicaciones/{id}', [UbicacionesController::class, 'getOne']);
-
-    Route::post('/login', [AuthController::class, 'login']);
+    
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/register', [AuthController::class, 'register']);
     
     Route::get('/observadores', [ObservadorController::class, 'getAll']);
@@ -64,4 +70,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/migrate', [MemController::class, 'migrate']);
     Route::get('/migrate-station-day', [MemController::class, 'migratePerDay']);
     Route::get('/migrate-day', [MemController::class, 'migrateOneDay']);
+
+    Route::middleware(['auth:sanctum'])->group(function () {
+        //con autorizacion
+    });
 });
