@@ -205,16 +205,33 @@ class MemController extends Controller
     }
     public function getAll(Request $request)
     {
-        $perPage = $request->input('items', 100);
-        $page = $request->input('page', 1);
-        
-        $allowedIds = ApiHelper::getAlloweds(Mem::class, $perPage,true)->pluck('id');
-        
-        $mems = Mem::whereIn('id', $allowedIds)
-            ->with(['microestacion'])
-            ->paginate($perPage, ['*'], 'page', $page);
-        
-        return response()->json($mems, 200);
+        try {
+            $perPage = $request->input('items', 100);
+            $page = $request->input('page', 1);
+            $allowedIds = ApiHelper::getAlloweds(Mem::class, null, true)->pluck('id');
+
+            // Consulta con chunking para evitar el límite de 2100 parámetros
+            $mems = Mem::where(function($query) use ($allowedIds) {
+                    $allowedIds->chunk(2000, function($chunk) use ($query) {
+                        $query->orWhereIn('id', $chunk);
+                    });
+                })
+                ->with(['microestacion'])
+                ->paginate($perPage, ['*'], 'page', $page);
+
+            return response()->json([
+                'success' => true,
+                'data' => $mems,
+                'message' => 'Datos obtenidos exitosamente'
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocurrió un error al obtener los datos',
+                'error' => config('app.debug') ? $e->getMessage() : null
+            ], 500);
+        }
     }
         
 }
