@@ -93,7 +93,7 @@ class ObservadorController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update($id, Request $request)
     {
         try{
             $validated = $request->validate([
@@ -110,10 +110,11 @@ class ObservadorController extends Controller
                 'dir_acta_nombramiento' => 'nullable|file|mimes:jpg,png|max:2048',
                 'comunidad_aledania' => 'nullable|string|max:100'
             ]);
+            
             $observador = Observador::findOrFail($id);
 
             $duplicateCI = Observador::where('numero_documento_identidad', $request->get('numero_documento_identidad'))->count(); 
-
+            
             //If numero_documento_identidad is duplicated and it is different of the current observador apply also when the numero_documento_identidad is edit
             if (($duplicateCI >= 1 && 
                 $id == $observador->id &&
@@ -226,6 +227,19 @@ class ObservadorController extends Controller
             // Buscar el observador por su ID
             $observador = Observador::findOrFail($id);
             $observador->fill($validated);
+            
+            $duplicateCI = Observador::where('numero_documento_identidad', $request->get('numero_documento_identidad'))->count(); 
+
+            //If numero_documento_identidad is duplicated and it is different of the current observador apply also when the numero_documento_identidad is edit
+            if (($duplicateCI >= 1 && 
+                $id == $observador->id &&
+                $request->get('numero_documento_identidad') != $observador->numero_documento_identidad 
+                ))
+            {
+                return response()->json([
+                    'message' => 'El CI es duplicado, ingrese otro.',
+                ], 404); 
+            }
 
             // Procesar y guardar 'dir_documento_identidad' si se proporciona
             if ($request->hasFile('dir_documento_identidad')) {

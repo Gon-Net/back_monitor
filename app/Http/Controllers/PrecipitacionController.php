@@ -7,6 +7,7 @@ use App\Models\Observador;
 use App\Models\Ubicacion;
 use Carbon\Carbon;
 use Carbon\Traits\ToStringFormat;
+use DateTime;
 use Illuminate\Http\Request;
 use App\Helpers\ApiHelper;
 use Illuminate\Validation\ValidationException;
@@ -34,22 +35,24 @@ class PrecipitacionController extends Controller
     public function store(Request $request)
     {
         try{
-            /*
-            if (now()->hour > 9 && now()->minute > 0 && now()->second > 0){
-                return response()->json([
-                    'message' => 'Solo se puede ingresar hasta las 9:00:00 am'
-                ], 404);
-            }
-            */
-            
             $validated = $request->validate([
                 'ubicacion_id' => 'required|exists:ubicacion,id',
                 'tipo_frecuencia_id' => 'required|numeric',
                 'intervalo' => 'required|in:INI,FIN',
                 'valor' => 'required|numeric',
-                'fecha_registro_precipitacion' => 'required|date',
+                'fecha_registro_precipitacion' => 'required|date_format:Y-m-d H:i:s',
                 'observador_id' => 'required|numeric',
             ]);
+
+            $datePrecipitation = $request->get("fecha_registro_precipitacion"); 
+            $dateTimePrecipitation = Carbon::parse($datePrecipitation);
+            $limitTimePrecipitation = $dateTimePrecipitation->copy()->setTime(9, 0, 0);
+
+            if ($dateTimePrecipitation->gt($limitTimePrecipitation)){
+                return response()->json([
+                    'message' => 'Solo se puede ingresar hasta las 9:00:00 am'
+                ], 404);
+            }
 
             /*
             $date_today = Carbon::parse($request->get('fecha_registro_precipitacion'));
@@ -94,10 +97,38 @@ class PrecipitacionController extends Controller
                 'tipo_frecuencia_id' => 'required',
                 'intervalo' => 'required|string|max:3',
                 'valor' => 'required|numeric',
-                'fecha_registro_precipitacion' => 'required|date',
+                'fecha_registro_precipitacion' => 'required|date_format:Y-m-d H:i:s',
                 'observador_id' => 'required|exists:observador,id',
             ]);
             $precipitacion = Precipitacion::findOrFail($id);
+            
+            $datePrecipitation = $request->get("fecha_registro_precipitacion"); 
+            $dateTimePrecipitation = Carbon::parse($datePrecipitation);
+            $limitTimePrecipitation = $dateTimePrecipitation->copy()->setTime(9, 0, 0);
+            if ($dateTimePrecipitation->gt($limitTimePrecipitation)){
+                return response()->json([
+                    'message' => 'Solo se puede ingresar hasta las 9:00:00 am'
+                ], 404);
+            }
+
+            $dayDate = (new DateTime($request->get('fecha_registro_precipitacion')))->format("Y-m-d");
+            $currentDayDate = (new DateTime($precipitacion->fecha_registro_precipitacion))->format("Y-m-d");
+      
+            $duplicatePrecipitations = Precipitacion::where("estado", "A")
+            ->whereDate('fecha_registro_precipitacion', $dayDate)
+            ->count();
+   
+            //If numero_documento_identidad is duplicated and it is different of the current observador apply also when the numero_documento_identidad is edit
+            if (($duplicatePrecipitations >= 1 && 
+                $id == $precipitacion->id &&
+                $dayDate != $currentDayDate 
+                ))
+            {
+                return response()->json([
+                    'message' => 'Ya existe ese registro en la fecha '.$dayDate.' ingrese con otra fecha.',
+                ], 404); 
+            }
+
             $precipitacion->fill($validated);
             $precipitacion->save();
             return response()->json([
