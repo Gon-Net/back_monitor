@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Precipitacion;
+use App\Models\Observador;
+use App\Models\Ubicacion;
+use Carbon\Carbon;
+use Carbon\Traits\ToStringFormat;
 use Illuminate\Http\Request;
 use App\Helpers\ApiHelper;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
+
 class PrecipitacionController extends Controller
 {
     public function getAll(Request $request)
@@ -28,6 +34,12 @@ class PrecipitacionController extends Controller
     public function store(Request $request)
     {
         try{
+            if (now()->hour > 9 && now()->minute > 0 && now()->second > 0){
+                return response()->json([
+                    'message' => 'Solo se puede ingresar hasta las 9:00:00 am'
+                ], 404);
+            }
+            
             $validated = $request->validate([
                 'ubicacion_id' => 'required|exists:ubicacion,id',
                 'tipo_frecuencia_id' => 'required|numeric',
@@ -36,6 +48,28 @@ class PrecipitacionController extends Controller
                 'fecha_registro_precipitacion' => 'required|date',
                 'observador_id' => 'required|numeric',
             ]);
+
+            $date_today = Carbon::parse($request->get('fecha_registro_precipitacion'));
+
+            if ($date_today->toDateString() != now()->toDateString())
+            {
+                return response()->json([
+                    'message' => 'Solo se puede registrar la fecha del dia de hoy.',
+                    'campo' => "fecha_registro_precipitacion",
+                ], 404);
+            }
+
+            $existToday = Precipitacion::query()
+                ->where('fecha_registro_precipitacion', $validated['fecha_registro_precipitacion'])
+                ->where('ubicacion_id', $validated['ubicacion_id'])->count();
+
+            if ($existToday > 0){
+                return response()->json([
+                    'message' => 'Ya se registro una precipitacion el dia '.$request->get('fecha_registro_precipitacion').' en esa ubicacion.',
+                    'errors' => [],
+                ], 404);
+            }
+
             $precipitacion = Precipitacion::create($validated);
             return response()->json([
                 'message' => 'Precipitacion creada exitosamente',
@@ -99,5 +133,45 @@ class PrecipitacionController extends Controller
                 'errors' => $e->errors(),
             ], 404);
         }
+    }
+
+    public function getAusentUbicationsPerDate(String $date = "")
+    {
+        try {
+            $validator = Validator::make(
+                ['fecha' => $date],
+                ['fecha' => 'required|date_format:Y-m-d']
+            );
+
+            if (!$validator->passes()) {
+                return response()->json([
+                    'message' => 'Error fecha no valida.',
+                    'errors' => "El formato debe ser yyyy-mm-dd",
+                ], 404);
+            }
+            $initDate = Carbon::parse($date)->startOfDay(); // 00:00:00
+            $endDate = Carbon::parse($date)->setTime(9, 0, 0);
+
+            $ubications = ApiHelper::getAlloweds(Ubicacion::class, all:true);
+            $precipitations = Precipitacion::whereBetween('fecha_registro_precipitacion', [$initDate, $endDate])->where("estado", "A")->get();
+            
+            $ubicationsFiltered = $ubications->filter(function ($ubication) use ($precipitations) {
+                return !$precipitations->contains(function ($precipitation) use ($ubication) {
+                    return $precipitation->ubicacion_id == $ubication->id;
+                });
+            });
+            
+            return response()->json([
+                "fecha"=> $date,
+                "ubicaciones" => $ubicationsFiltered
+            ]);
+        }
+        catch (ValidationException $e){
+            return response()->json([
+                'message' => 'Error',
+                'errors' => $e->errors(),
+            ], 404);
+        }
+        
     }
 }

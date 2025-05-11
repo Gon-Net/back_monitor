@@ -26,7 +26,7 @@ class MemController extends Controller
                 'uv' => 'required|numeric',
                 'precipitacion_tipo' => 'nullable|string',
                 'precipitacion_probabilidad' => 'required|numeric',
-                'precipitacion' => 'required|numeric'
+                'precipitacion' => 'nullable|numeric'
             ]);
             Mem::create($validated);
             return true;
@@ -72,7 +72,7 @@ class MemController extends Controller
                 'uv' => 'required|numeric',
                 'precipitacion_tipo' => 'nullable|string',
                 'precipitacion_probabilidad' => 'required|numeric',
-                'precipitacion' => 'required|numeric'
+                'precipitacion' => 'nullable|numeric'
             ];
             $count = 0;
             foreach ($data as $row) {

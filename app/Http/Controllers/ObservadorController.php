@@ -53,6 +53,15 @@ class ObservadorController extends Controller
                 'comunidad_aledania' => 'nullable|string|max:100'
             ]);
 
+            $duplicateCI = Observador::where('numero_documento_identidad', $request->get('numero_documento_identidad'))->count(); 
+
+            if ($duplicateCI > 0)
+            {
+                return response()->json([
+                    'message' => 'El CI es duplicado, ingrese otro.',
+                ], 404); 
+            }
+
             if ($request->hasFile('dir_documento_identidad')) {
                 $file = $request->file('dir_documento_identidad');
                 $filename = time() . '_' . $file->getClientOriginalName(); 

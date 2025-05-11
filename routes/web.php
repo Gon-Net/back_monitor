@@ -57,6 +57,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('/precipitaciones', [PrecipitacionController::class, 'store']);
     Route::put('/precipitaciones/{id}', [PrecipitacionController::class, 'update']);
     Route::delete('/precipitaciones/{id}', [PrecipitacionController::class, 'destroy']);
+    Route::get('/precipitaciones/ubicaciones-faltantes/{date}', [PrecipitacionController::class, 'getAusentUbicationsPerDate']);
     
     Route::get('/eventos-extremos', [EventoExtremoController::class, 'getAll']);
     Route::get('/eventos-extremos/{id}', [EventoExtremoController::class, 'getOne']);
