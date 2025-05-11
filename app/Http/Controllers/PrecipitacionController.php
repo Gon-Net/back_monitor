@@ -34,11 +34,13 @@ class PrecipitacionController extends Controller
     public function store(Request $request)
     {
         try{
+            /*
             if (now()->hour > 9 && now()->minute > 0 && now()->second > 0){
                 return response()->json([
                     'message' => 'Solo se puede ingresar hasta las 9:00:00 am'
                 ], 404);
             }
+            */
             
             $validated = $request->validate([
                 'ubicacion_id' => 'required|exists:ubicacion,id',
@@ -49,6 +51,7 @@ class PrecipitacionController extends Controller
                 'observador_id' => 'required|numeric',
             ]);
 
+            /*
             $date_today = Carbon::parse($request->get('fecha_registro_precipitacion'));
 
             if ($date_today->toDateString() != now()->toDateString())
@@ -58,6 +61,7 @@ class PrecipitacionController extends Controller
                     'campo' => "fecha_registro_precipitacion",
                 ], 404);
             }
+            */
 
             $existToday = Precipitacion::query()
                 ->where('fecha_registro_precipitacion', $validated['fecha_registro_precipitacion'])

@@ -21,7 +21,7 @@ class MigrateMems extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Migrate all mems in one date';
 
     private function log_text($text)
     {

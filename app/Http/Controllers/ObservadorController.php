@@ -12,16 +12,19 @@ class ObservadorController extends Controller
     {
         $ubicacion_id = $request->input('ubicacion_id');
         $tipo_observador_id = $request->input('tipo_observador_id');
-
+        $tipo_usuarioapk_id = $request->input('tipo_usuarioapk_id');
         $perPage = $request->input('items', 100);
         $observadoresFiltrados = ApiHelper::getAlloweds(Observador::class, all: true)->pluck('id');
         $observadores = Observador::whereIn('id', $observadoresFiltrados);
-        
+
         if ($ubicacion_id !== null){
             $observadores = $observadores->where('ubicacion_id', $ubicacion_id);
         }
         if ($tipo_observador_id !== null){
             $observadores = $observadores->where('tipo_observador_id', $tipo_observador_id);
+        }
+        if ($tipo_usuarioapk_id !== null){
+            $observadores = $observadores->where('tipo_usuarioapk_id', $tipo_usuarioapk_id);
         }
 
         $observadoresConRelaciones = $observadores
@@ -108,6 +111,19 @@ class ObservadorController extends Controller
                 'comunidad_aledania' => 'nullable|string|max:100'
             ]);
             $observador = Observador::findOrFail($id);
+
+            $duplicateCI = Observador::where('numero_documento_identidad', $request->get('numero_documento_identidad'))->count(); 
+
+            //If numero_documento_identidad is duplicated and it is different of the current observador apply also when the numero_documento_identidad is edit
+            if (($duplicateCI >= 1 && 
+                $id == $observador->id &&
+                $request->get('numero_documento_identidad') != $observador->numero_documento_identidad 
+                ))
+            {
+                return response()->json([
+                    'message' => 'El CI es duplicado, ingrese otro.',
+                ], 404); 
+            }
 
             //$observador->save();
             if (isset($validated['ubicacion_id'])) {
