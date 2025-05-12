@@ -194,7 +194,7 @@ class PrecipitacionController extends Controller
                 return !$precipitations->contains(function ($precipitation) use ($ubication) {
                     return $precipitation->ubicacion_id == $ubication->id;
                 });
-            });
+            })->toArray();
             
             return response()->json([
                 "fecha"=> $date,
