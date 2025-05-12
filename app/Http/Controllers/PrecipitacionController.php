@@ -185,7 +185,7 @@ class PrecipitacionController extends Controller
                 ], 404);
             }
             $initDate = Carbon::parse($date)->startOfDay(); // 00:00:00
-            $endDate = Carbon::parse($date)->setTime(9, 0, 0);
+            $endDate = Carbon::parse($date)->setTime(23, 59, 59);
 
             $ubications = ApiHelper::getAlloweds(Ubicacion::class, all:true);
             $precipitations = Precipitacion::whereBetween('fecha_registro_precipitacion', [$initDate, $endDate])->where("estado", "A")->get();
