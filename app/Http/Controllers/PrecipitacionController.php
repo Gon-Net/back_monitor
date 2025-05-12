@@ -187,19 +187,24 @@ class PrecipitacionController extends Controller
             $initDate = Carbon::parse($date)->startOfDay(); // 00:00:00
             $endDate = Carbon::parse($date)->setTime(23, 59, 59);
 
-            $ubications = ApiHelper::getAlloweds(Ubicacion::class, all:true);
-            $precipitations = Precipitacion::whereBetween('fecha_registro_precipitacion', [$initDate, $endDate])->where("estado", "A")->get();
-            
-            $ubicationsFiltered = $ubications->filter(function ($ubication) use ($precipitations) {
-                return !$precipitations->contains(function ($precipitation) use ($ubication) {
-                    return $precipitation->ubicacion_id == $ubication->id;
-                });
-            })->toArray();
-            
+            $ubications = ApiHelper::getAlloweds(Ubicacion::class, all: true);
+            $precipitations = Precipitacion::whereBetween('fecha_registro_precipitacion', [$initDate, $endDate])
+                    ->where("estado", "A")
+                    ->get();
+
+            $precipitationIds = $precipitations->pluck('ubicacion_id')->toArray();
+
+            $ubicationsFiltered = $ubications->whereNotIn('id', $precipitationIds)
+                                ->map(function ($ubicacion) {
+                                    return $ubicacion->toArray(); 
+                                })
+                                ->values()
+                                ->toArray();
+
             return response()->json([
-                "fecha"=> $date,
+                "fecha" => $date,
                 "ubicaciones" => $ubicationsFiltered
-            ]);
+            ], 200);
         }
         catch (ValidationException $e){
             return response()->json([
