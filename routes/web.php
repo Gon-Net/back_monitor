@@ -10,6 +10,9 @@ use App\Http\Controllers\TipoObservadoresController;
 use App\Http\Controllers\TiposFrecuenciaController;
 use App\Http\Controllers\TiposObservadoresCategoriaController;
 use App\Http\Controllers\UbicacionesController;
+use App\Http\Controllers\ContadorController;
+use App\Http\Controllers\VisitaController;
+use App\Http\Controllers\PrediccionController;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AuthenticateSanctum;
@@ -71,6 +74,17 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/migrate', [MemController::class, 'migrate']);
     Route::get('/migrate-station-day', [MemController::class, 'migratePerDay']);
     Route::get('/migrate-day', [MemController::class, 'migrateOneDay']);
+
+    Route::get('/visitas', [VisitaController::class, 'getAll']);
+    Route::post('/visitas', [VisitaController::class, 'store']);
+    Route::put('/visitas/{id}', [VisitaController::class, 'update']);
+    Route::delete('/visitas/{id}', [VisitaController::class, 'destroy']);
+
+    Route::get('/contadores', [ContadorController::class, 'getAll']);
+    Route::post('/contadores', [ContadorController::class, 'store']);
+
+    Route::get('/predicciones', [PrediccionController::class, 'getAll']);
+    Route::post('/predicciones', [PrediccionController::class, 'store']);
 
     Route::middleware(['auth:sanctum'])->group(function () {
         //con autorizacion
