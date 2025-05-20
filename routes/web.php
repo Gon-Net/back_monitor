@@ -83,8 +83,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/contadores', [ContadorController::class, 'getAll']);
     Route::post('/contadores', [ContadorController::class, 'store']);
 
-    Route::get('/predicciones', [PrediccionController::class, 'getAll']);
-    Route::post('/predicciones', [PrediccionController::class, 'store']);
+    Route::get('/pronosticos', [PrediccionController::class, 'getAll']);
+    Route::get('/migrar-pronosticos', [PrediccionController::class, 'migrateForecasts']);
 
     Route::middleware(['auth:sanctum'])->group(function () {
         //con autorizacion

@@ -37,7 +37,6 @@ class ContadorController extends Controller
     {
         try {
             $validated = $request->validate([
-                'fecha_registro' => 'required|date',
                 'contador' => 'required|numeric',
                 'observacion' => 'required|string|max:100'
             ]);

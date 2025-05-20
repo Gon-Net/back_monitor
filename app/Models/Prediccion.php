@@ -21,7 +21,8 @@ class Prediccion extends Model
         'indice_uv',
         'descripcion',
         'minimo',
-        'detalle'
+        'detalle',
+        'ubicacion_id'
     ];
     protected $hidden = [
         'estado'

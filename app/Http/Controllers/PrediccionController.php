@@ -9,8 +9,33 @@ use App\Helpers\ApiHelper;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
 class PrediccionController extends Controller
 {
+    private function get_keys($data)
+    {
+        $keys = array();
+        foreach($data as $item){
+            $id = $item['ubicacion_id'];
+            $date = $item['fecha'];
+            $hour = $item['hora'];
+            $key = "{$id}-{$date}-{$hour}";
+            array_push($keys, $key);
+        }
+        return $keys;
+    }
+    #get the index of array keys that are not in database
+    private function exclude_current_keys($keys)
+    {
+        $indexs = array();
+        $currents = ApiHelper::getAlloweds(Prediccion::class, all: true);
+        $all_keys = PrediccionController::get_keys(data: $currents);
+        $dif_keys = array_diff($keys, $all_keys);
+        foreach ($dif_keys as $key) {
+            array_push($indexs, array_search($key, $keys));
+        }
+        return $indexs;
+    }
     public function getAll(Request $request)
     {
         $ubication_id = $request->input('ubication_id', null);
@@ -38,6 +63,7 @@ class PrediccionController extends Controller
         DB::beginTransaction();
         try {
             $rules = [
+                'ubicacion_id' => 'required|exists:ubicacion,id',
                 'hora' => 'required|numeric',
                 'dia' => 'required|string|max:20',
                 'velocidad_viento' => 'nullable|numeric',
@@ -67,36 +93,50 @@ class PrediccionController extends Controller
             throw $e;
         }
     }
-    public function post(Request $request)
+    public function migrate_forecasts_per_station($station_id)
     {
-        try
-        {
-            $data = collect($request->input('items'))->map(function ($item) {
-                return new Prediccion([
-                    'hora' => $item['hora'],
-                    'dia' => $item['dia'],
-                    'velocidad_viento' => $item['velocidad_viento'],
-                    'direccion_viento' => $item['direccion_viento'],
-                    'temperatura' => $item['temperatura'],
-                    'humedad' => $item['humedad'],
-                    'probabilidad_lluvia' => $item['probabilidad_lluvia'],
-                    'detalle' => $item['detalle'],
-                    'indice_uv' => $item['indice_uv'],
-                    'descripcion' => $item['descripcion'],
-                    'maximo' => $item['maximo'],
-                    'minimo' => $item['minimo']
-                ]);
-            });
-
-            $count = $this->save_new_forecasts($data);
+        try{
+            $response = Http::withHeaders([
+                'Authorization' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NDEzNTgyMjcsImV4cCI6MTgwNDQzMDIyN30.bErK9dnooNLn45MOzOEKNxq2Epbq3usdTTjWivbVvUk',
+                'Accept' => 'application/json',
+            ])->get("https://sr.info.bo/pro/pronosticos_pem/{$station_id}");
+            if ($response->successful()) {
+                $datos = $response->json();
+                $data = $datos['DATA'];
+                $new_indexs = Prediccion::exclude_current_keys(PrediccionController::get_keys($data));
+                $new_objects = array();
+                foreach ($new_indexs as $index){
+                    array_push($new_objects, $data[$index]);
+                }
+                return PrediccionController::save_new_forecasts($new_objects);
+            } else {
+                //$codigoError = $response->status();
+                $mensajeError = $response->body();
+                throw new \Exception($mensajeError);
+            }
+        }
+        catch (ValidationException $e) {
             return response()->json([
-                'message' => 'Se creo '.$count.' predicciones.'
-            ], 201);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Se debe enviar una ubicacion disponible.'
+                'message' => 'Ocurrio un error.'
             ], 404);
         }
-        
+    }
+    public function migrateForecasts()
+    {
+        try{
+            $count = 0;
+            $ubicacions_id = ApiHelper::getAlloweds(Ubicacion::class, all: true)->pluck('id_pem');
+            foreach($ubicacions_id as $uid){
+                $count = $count + PrediccionController::migrate_forecasts_per_station($uid);
+            }
+            return response()->json([
+                'message' => 'Se guardo '.$count.' pronosticos.'
+            ], 200);
+        }
+        catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Ocurrio un error.'
+            ], 404);
+        }
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Ubicacion;
 use App\Models\Visita;
 use Illuminate\Http\Request;
 use App\Helpers\ApiHelper;
@@ -12,7 +11,7 @@ class VisitaController extends Controller
     public function getAll(Request $request)
     {
         $perPage = $request->input('items', 100);
-        return response()->json(ApiHelper::getAlloweds(Ubicacion::class, $perPage), 200);
+        return response()->json(ApiHelper::getAlloweds(Visita::class, $perPage), 200);
     }
     public function getOne(Request $request, $id)
     {
@@ -24,12 +23,11 @@ class VisitaController extends Controller
         }
         return response()->json($ubicacion, 200);
     }
-    public function post(Request $request)
+    public function store(Request $request)
     {
         try {
             $validated = $request->validate([
                 'ubicacion_id' => 'required|exists:ubicacion,id',
-                'fecha_registro' => 'required|date',
                 'usuario' => 'required|numeric',
                 'observacion' => 'required|string'
             ]);
@@ -51,16 +49,20 @@ class VisitaController extends Controller
         try{
             $validated = $request->validate([
                 'ubicacion_id' => 'required|exists:ubicacion,id',
-                'fecha_registro' => 'required|date',
                 'usuario' => 'required|numeric',
                 'observacion' => 'required|string'
             ]);
             $visit = Visita::findOrFail($id);
+            if ($visit->estado == "B"){
+                return response()->json([
+                'message' => 'Visita no valida.',
+            ], 404);
+            }
             $visit->fill($validated);
             $visit->save();
             return response()->json([
                 'message' => 'Visita actualizado exitosamente',
-                'data' => $$visit,
+                'data' => $visit,
             ], 200);
         } catch (ValidationException $e) {
             return response()->json([

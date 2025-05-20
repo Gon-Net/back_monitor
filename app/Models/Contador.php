@@ -15,4 +15,15 @@ class Contador extends Model
     protected $attributes = [
         'estado' => 'A',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (!$model->fecha_registro) {
+                $model->fecha_registro = now();
+            }
+        });
+    }
 }
