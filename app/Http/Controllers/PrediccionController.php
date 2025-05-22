@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Forecast;
+use App\Models\MicroEstacion;
 use App\Models\Prediccion;
 use App\Models\Ubicacion;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
 class PrediccionController extends Controller
 {
     private function get_keys($data)
@@ -17,7 +19,7 @@ class PrediccionController extends Controller
         $keys = array();
         foreach($data as $item){
             $id = $item['ubicacion_id'];
-            $date = $item['fecha'];
+            $date = $item['fecha_pronostico'];
             $hour = $item['hora'];
             $key = "{$id}-{$date}-{$hour}";
             array_push($keys, $key);
@@ -40,6 +42,7 @@ class PrediccionController extends Controller
     {
         $ubication_id = $request->input('ubication_id', null);
         $date = $request->input('fecha', null);
+        $perPage = $request->input('items', 100);
         if ($ubication_id == null){
             return response()->json([
                 'message' => 'Se debe enviar una ubication_id'
@@ -50,32 +53,38 @@ class PrediccionController extends Controller
                 'message' => 'Se debe enviar una fecha'
             ], 404);
         }
-        $ubication = Ubicacion::findOrFail($ubication_id);
-        if ($ubication->estado == 'B'){
-            return response()->json([
-                'message' => 'Se debe enviar una ubicacion disponible.'
-            ], 404);
-        }
-        $values = ApiHelper::getAlloweds(Prediccion::class, all: true);
-        return response()->json($values, 200);
+        $date = Carbon::parse($date)->toDateString();
+
+        $predictions_filtered = ApiHelper::getAlloweds(Prediccion::class, all: true)->pluck('id')
+    ->filter() 
+    ->values();
+        
+        $predictions = Prediccion::whereIn('id', $predictions_filtered)
+            ->where('ubicacion_id', $ubication_id)
+            ->whereDate('fecha_pronostico', $date);
+        $predictions = $predictions
+            ->paginate($perPage);
+        return response()->json($predictions, 200);
     }
     private function save_new_forecasts($data){
         DB::beginTransaction();
         try {
             $rules = [
-                'ubicacion_id' => 'required|exists:ubicacion,id',
+                'ubicacion_id' => 'required|numeric',
+                //'ubicacion_id' => 'required|exists:ubicacion,id',
                 'hora' => 'required|numeric',
                 'dia' => 'required|string|max:20',
                 'velocidad_viento' => 'nullable|numeric',
                 'direccion_viento' => 'nullable|string|max:10',
                 'temperatura' => 'nullable|numeric',
-                'humedad' => 'required|numeric',
+                'humedad' => 'nullable|numeric',
                 'probabilidad_lluvia' => 'required|numeric',
                 'detalle' => 'required|string',
                 'indice_uv' => 'required|numeric',
                 'descripcion' => 'required|string',
                 'maximo' => 'required|numeric',
-                'minimo' =>  'required|numeric'
+                'minimo' =>  'required|numeric',
+                'fecha_pronostico' => 'required|date',
             ];
             $count = 0;
             foreach ($data as $row) {
@@ -103,10 +112,30 @@ class PrediccionController extends Controller
             if ($response->successful()) {
                 $datos = $response->json();
                 $data = $datos['DATA'];
-                $new_indexs = Prediccion::exclude_current_keys(PrediccionController::get_keys($data));
+                $newValues = [];
+                foreach ($data as &$p) {
+                    $value = [
+                        'ubicacion_id' => $station_id,
+                        'probabilidad_lluvia' => $p["ProbabilidadLluvia"],
+                        'indice_uv' => $p['IndiceUV'],
+                        'detalle' => $p['Detalle'],
+                        'descripcion' => $p["DescripcionUV"],
+                        'maximo' => $p["max"],
+                        'minimo' => $p["min"],
+                        'velocidad_viento' => $p["VelocidadViento"],
+                        'direccion_viento' => $p["DireccionViento"],
+                        'temperatura' => $p["Temperatura"],
+                        'humedad' => $p["Humedad"],
+                        'hora' =>$p["hora"],
+                        'dia' =>$p["dia"],
+                        'fecha_pronostico' => $p['fecha']
+                    ];
+                    $newValues[] = $value;
+                }
+                $new_indexs = PrediccionController::exclude_current_keys(PrediccionController::get_keys($newValues));
                 $new_objects = array();
                 foreach ($new_indexs as $index){
-                    array_push($new_objects, $data[$index]);
+                    array_push($new_objects, $newValues[$index]);
                 }
                 return PrediccionController::save_new_forecasts($new_objects);
             } else {
@@ -125,9 +154,10 @@ class PrediccionController extends Controller
     {
         try{
             $count = 0;
-            $ubicacions_id = ApiHelper::getAlloweds(Ubicacion::class, all: true)->pluck('id_pem');
+            $ubicacions_id = ApiHelper::getAlloweds(MicroEstacion::class, all: true)->pluck('id_pem');
             foreach($ubicacions_id as $uid){
                 $count = $count + PrediccionController::migrate_forecasts_per_station($uid);
+                sleep(2);
             }
             return response()->json([
                 'message' => 'Se guardo '.$count.' pronosticos.'

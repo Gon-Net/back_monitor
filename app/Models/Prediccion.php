@@ -9,7 +9,6 @@ class Prediccion extends Model
     public $timestamps = false;
     protected $table = 'pronosticos';
     protected $fillable = [
-        'fecha_registro',
         'hora',
         'dia',
         'velocidad_viento',
@@ -17,9 +16,11 @@ class Prediccion extends Model
         'temperatura',
         'humedad',
         'probabilidad_lluvia',
+        'fecha_pronostico',
         'detalle',
         'indice_uv',
         'descripcion',
+        'maximo',
         'minimo',
         'detalle',
         'ubicacion_id'
