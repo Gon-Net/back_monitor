@@ -64,3 +64,6 @@ Homestead.json
 
 migrate.bat
 migrate.vbs
+
+*.bat
+!example.bat
