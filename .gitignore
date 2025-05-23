@@ -61,3 +61,6 @@ Thumbs.db
 /.vagrant
 Homestead.yaml
 Homestead.json
+
+migrate.bat
+migrate.vbs
