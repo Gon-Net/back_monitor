@@ -152,13 +152,22 @@ class PrediccionController extends Controller
     }
     public function migrateForecasts()
     {
-        try{
-            $count = 0;
+        $count = 0;
+        try {
             $ubicacions_id = ApiHelper::getAlloweds(MicroEstacion::class, all: true)->pluck('id_pem');
             foreach($ubicacions_id as $uid){
                 $count = $count + PrediccionController::migrate_forecasts_per_station($uid);
                 sleep(2);
             }
+            return $count;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+    public function migrate()
+    {
+        try{
+            $count = $this->migrateForecasts();
             return response()->json([
                 'message' => 'Se guardo '.$count.' pronosticos.'
             ], 200);
