@@ -17,8 +17,7 @@ class PrediccionController extends Controller
     public function getAll(Request $request)
     {
         $ubication_id = $request->input('ubication_id', null);
-        $date = $request->input('fecha', null);
-        $perPage = $request->input('items', 100);
+        $date = $request->input('fecha_registro', null);
         if ($ubication_id == null){
             return response()->json([
                 'message' => 'Se debe enviar una ubication_id'
@@ -26,20 +25,20 @@ class PrediccionController extends Controller
         }
         if ($date == null){
             return response()->json([
-                'message' => 'Se debe enviar una fecha'
+                'message' => 'Se debe enviar una fecha_registro en formato yyyy-mm-dd'
             ], 404);
         }
         $date = Carbon::parse($date)->toDateString();
 
         $predictions_filtered = ApiHelper::getAlloweds(Prediccion::class, all: true)->pluck('id')
-    ->filter() 
-    ->values();
+            ->filter() 
+            ->values();
         
         $predictions = Prediccion::whereIn('id', $predictions_filtered)
             ->where('ubicacion_id', $ubication_id)
-            ->whereDate('fecha_pronostico', $date);
-        $predictions = $predictions
-            ->paginate($perPage);
+            ->whereDate('fecha_registro', $date)
+            ->paginate(20);
+            
         return response()->json($predictions, 200);
     }
     private function save_new_forecasts($data){

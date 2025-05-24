@@ -23,7 +23,8 @@ class Prediccion extends Model
         'maximo',
         'minimo',
         'detalle',
-        'ubicacion_id'
+        'ubicacion_id',
+        'fecha_registro'
     ];
     protected $hidden = [
         'estado'
