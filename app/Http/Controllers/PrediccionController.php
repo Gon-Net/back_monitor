@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Forecast;
 use App\Models\MicroEstacion;
 use App\Models\Prediccion;
-use App\Models\Ubicacion;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Helpers\ApiHelper;
 use Illuminate\Validation\ValidationException;
@@ -144,6 +143,12 @@ class PrediccionController extends Controller
     public function migrate()
     {
         try{
+            $lockKey = 'lock:procesar-api';
+            $lock = Cache::lock($lockKey, 300);
+
+            if (!$lock->get()) {
+                return response()->json(['message' => 'Proceso en curso. Intente nuevamente más tarde.'], 429);
+            }
             $count = $this->migrateForecasts();
             return response()->json([
                 'message' => 'Se guardo '.$count.' nuevos pronosticos.'
@@ -153,6 +158,9 @@ class PrediccionController extends Controller
             return response()->json([
                 'message' => 'Ocurrio un error.'
             ], 404);
+        }
+        finally {
+            optional($lock)->release();
         }
     }
 }
