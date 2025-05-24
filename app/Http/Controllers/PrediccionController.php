@@ -14,30 +14,6 @@ use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 class PrediccionController extends Controller
 {
-    private function get_keys($data)
-    {
-        $keys = array();
-        foreach($data as $item){
-            $id = $item['ubicacion_id'];
-            $date = $item['fecha_pronostico'];
-            $hour = $item['hora'];
-            $key = "{$id}-{$date}-{$hour}";
-            array_push($keys, $key);
-        }
-        return $keys;
-    }
-    #get the index of array keys that are not in database
-    private function exclude_current_keys($keys)
-    {
-        $indexs = array();
-        $currents = ApiHelper::getAlloweds(Prediccion::class, all: true);
-        $all_keys = PrediccionController::get_keys(data: $currents);
-        $dif_keys = array_diff($keys, $all_keys);
-        foreach ($dif_keys as $key) {
-            array_push($indexs, array_search($key, $keys));
-        }
-        return $indexs;
-    }
     public function getAll(Request $request)
     {
         $ubication_id = $request->input('ubication_id', null);
@@ -132,12 +108,7 @@ class PrediccionController extends Controller
                     ];
                     $newValues[] = $value;
                 }
-                $new_indexs = PrediccionController::exclude_current_keys(PrediccionController::get_keys($newValues));
-                $new_objects = array();
-                foreach ($new_indexs as $index){
-                    array_push($new_objects, $newValues[$index]);
-                }
-                return PrediccionController::save_new_forecasts($new_objects);
+                return PrediccionController::save_new_forecasts($newValues);
             } else {
                 //$codigoError = $response->status();
                 $mensajeError = $response->body();
@@ -154,7 +125,14 @@ class PrediccionController extends Controller
     {
         $count = 0;
         try {
-            $ubicacions_id = ApiHelper::getAlloweds(MicroEstacion::class, all: true)->pluck('id_pem');
+            $ubicacions_id = ApiHelper::getAlloweds(MicroEstacion::class, all: true)->pluck('id_pem')->toArray();
+            $date = date("Y-m-d");
+            $registrados = Prediccion::whereDate('fecha_registro', $date)
+                ->whereIn('ubicacion_id', $ubicacions_id)
+                ->pluck('ubicacion_id')
+                ->toArray();
+            $ubicacions_id = array_diff($ubicacions_id, $registrados);
+            
             foreach($ubicacions_id as $uid){
                 $count = $count + PrediccionController::migrate_forecasts_per_station($uid);
                 sleep(2);
@@ -169,7 +147,7 @@ class PrediccionController extends Controller
         try{
             $count = $this->migrateForecasts();
             return response()->json([
-                'message' => 'Se guardo '.$count.' pronosticos.'
+                'message' => 'Se guardo '.$count.' nuevos pronosticos.'
             ], 200);
         }
         catch (ValidationException $e) {

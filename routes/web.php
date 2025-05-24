@@ -84,7 +84,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('/contadores', [ContadorController::class, 'store']);
 
     Route::get('/pronosticos', [PrediccionController::class, 'getAll']);
-    Route::get('/migrar-pronosticos', [PrediccionController::class, 'migrateForecasts']);
+    Route::get('/migrar-pronosticos', [PrediccionController::class, 'migrate']);
 
     Route::middleware(['auth:sanctum'])->group(function () {
         //con autorizacion
