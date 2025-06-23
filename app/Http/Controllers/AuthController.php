@@ -26,14 +26,16 @@ class AuthController extends Controller
     {
         try {
             $credentials = $request->validate([
-                'email' => 'required|email',
-                'password' => 'required',
+                'nombre_usuario' => 'required',
+                'numero_documento_identidad' => 'required',
             ]);
 
-            if (Auth::attempt($credentials)) {
-                $user = Auth::user();
-                $token = $user->createToken('token-name')->plainTextToken;
+            $user = \App\Models\ObservadorAuth::where('nombre_usuario', $credentials['nombre_usuario'])
+                ->where('numero_documento_identidad', $credentials['numero_documento_identidad'])
+                ->first();
 
+            if ($user) {
+                $token = $user->createToken('token-name')->plainTextToken;
                 return response()->json(['token' => $token], 200);
             }
 
@@ -77,3 +79,8 @@ class AuthController extends Controller
         }
     }
 }
+
+
+/*
+
+*/
