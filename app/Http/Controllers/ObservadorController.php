@@ -56,6 +56,7 @@ class ObservadorController extends Controller
                 'comunidad_aledania' => 'nullable|string|max:100'
             ]);
 
+            /*
             $duplicateCI = Observador::where('numero_documento_identidad', $request->get('numero_documento_identidad'))->count(); 
 
             if ($duplicateCI > 0)
@@ -64,6 +65,7 @@ class ObservadorController extends Controller
                     'message' => 'El CI es duplicado, ingrese otro.',
                 ], 404); 
             }
+            */
 
             if ($request->hasFile('dir_documento_identidad')) {
                 $file = $request->file('dir_documento_identidad');
@@ -113,6 +115,7 @@ class ObservadorController extends Controller
             
             $observador = Observador::findOrFail($id);
 
+            /*
             $duplicateCI = Observador::where('numero_documento_identidad', $request->get('numero_documento_identidad'))->count(); 
             
             //If numero_documento_identidad is duplicated and it is different of the current observador apply also when the numero_documento_identidad is edit
@@ -125,6 +128,7 @@ class ObservadorController extends Controller
                     'message' => 'El CI es duplicado, ingrese otro.',
                 ], 404); 
             }
+            */
 
             //$observador->save();
             if (isset($validated['ubicacion_id'])) {
@@ -228,6 +232,7 @@ class ObservadorController extends Controller
             $observador = Observador::findOrFail($id);
             $observador->fill($validated);
             
+            /*
             $duplicateCI = Observador::where('numero_documento_identidad', $request->get('numero_documento_identidad'))->count(); 
 
             //If numero_documento_identidad is duplicated and it is different of the current observador apply also when the numero_documento_identidad is edit
@@ -240,6 +245,7 @@ class ObservadorController extends Controller
                     'message' => 'El CI es duplicado, ingrese otro.',
                 ], 404); 
             }
+            */
 
             // Procesar y guardar 'dir_documento_identidad' si se proporciona
             if ($request->hasFile('dir_documento_identidad')) {

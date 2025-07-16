@@ -48,19 +48,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/observadores', [ObservadorController::class, 'getAll']);
     Route::get('/observadores_completo', [ObservadorController::class, 'getWithValues']);
     Route::post('/observadores-buscar', [ObservadorController::class, 'findObservador']);
-
-    Route::post('/observadores', [ObservadorController::class, 'store']);
-    Route::put('/observadores/{id}', [ObservadorController::class, 'update']);
-
-    Route::put('/observadores_files/{id}', [ObservadorController::class, 'update_with_files']);
-
-    Route::delete('/observadores/{id}', [ObservadorController::class, 'destroy']);
     
     Route::get('/eventos-extremos', [EventoExtremoController::class, 'getAll']);
     Route::get('/eventos-extremos/{id}', [EventoExtremoController::class, 'getOne']);
-    Route::post('/eventos-extremos', [EventoExtremoController::class, 'store']);
-    Route::put('/eventos-extremos/{id}', [EventoExtremoController::class, 'update']);
-    Route::delete('/eventos-extremos/{id}', [EventoExtremoController::class, 'destroy']);
 
     Route::get('/microestacion', [MicroEstacionController::class, 'getAll']);
 
@@ -80,12 +70,21 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/pronosticos', [PrediccionController::class, 'getAll']);
     Route::get('/migrar-pronosticos', [PrediccionController::class, 'migrate']);
 
+    Route::get('/precipitaciones', [PrecipitacionController::class, 'getAll']);
+    Route::get('/precipitaciones/ubicaciones-faltantes/{date}', [PrecipitacionController::class, 'getAusentUbicationsPerDate']);
+
     Route::middleware(['auth:sanctum'])->group(function () {
-        Route::get('/precipitaciones', [PrecipitacionController::class, 'getAll']);
+        Route::post('/observadores', [ObservadorController::class, 'store']);
+        Route::put('/observadores/{id}', [ObservadorController::class, 'update']);
+        Route::put('/observadores_files/{id}', [ObservadorController::class, 'update_with_files']);
+        Route::delete('/observadores/{id}', [ObservadorController::class, 'destroy']);
+
         Route::post('/precipitaciones', [PrecipitacionController::class, 'store']);
         Route::put('/precipitaciones/{id}', [PrecipitacionController::class, 'update']);
         Route::delete('/precipitaciones/{id}', [PrecipitacionController::class, 'destroy']);
-        Route::get('/precipitaciones/ubicaciones-faltantes/{date}', [PrecipitacionController::class, 'getAusentUbicationsPerDate']);
-        
+
+        Route::post('/eventos-extremos', [EventoExtremoController::class, 'store']);
+        Route::put('/eventos-extremos/{id}', [EventoExtremoController::class, 'update']);
+        Route::delete('/eventos-extremos/{id}', [EventoExtremoController::class, 'destroy']);
     });
 });
