@@ -198,7 +198,8 @@ class ObservadorController extends Controller
             'ubicacion_id' => $observador->ubicacion_id,
             'tipo_observador_id' => $observador->tipo_observador_id,
             'tipo_usuarioapk_id' => $observador->tipo_usuarioapk_id,
-            'nombre_usuario' => $observador->nombre_usuario
+            'nombre_usuario' => $observador->nombre_usuario,
+            'numero_documento_identidad'=> $observador->numero_documento_identidad
         ], 200);
         } catch (ValidationException $e) {
             return response()->json([
