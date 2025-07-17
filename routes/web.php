@@ -51,6 +51,9 @@ Route::group(['prefix' => 'v1'], function () {
     
     Route::get('/eventos-extremos', [EventoExtremoController::class, 'getAll']);
     Route::get('/eventos-extremos/{id}', [EventoExtremoController::class, 'getOne']);
+    Route::post('/eventos-extremos', [EventoExtremoController::class, 'store']);
+    Route::put('/eventos-extremos/{id}', [EventoExtremoController::class, 'update']);
+    Route::delete('/eventos-extremos/{id}', [EventoExtremoController::class, 'destroy']);
 
     Route::get('/microestacion', [MicroEstacionController::class, 'getAll']);
 
@@ -72,19 +75,14 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('/precipitaciones', [PrecipitacionController::class, 'getAll']);
     Route::get('/precipitaciones/ubicaciones-faltantes/{date}', [PrecipitacionController::class, 'getAusentUbicationsPerDate']);
+    Route::post('/precipitaciones', [PrecipitacionController::class, 'store']);
+    Route::put('/precipitaciones/{id}', [PrecipitacionController::class, 'update']);
+    Route::delete('/precipitaciones/{id}', [PrecipitacionController::class, 'destroy']);
 
-    Route::middleware(['auth:sanctum'])->group(function () {
+    Route::middleware(['auth:sanctum', 'check.token.expiry'])->group(function () {
         Route::post('/observadores', [ObservadorController::class, 'store']);
         Route::put('/observadores/{id}', [ObservadorController::class, 'update']);
         Route::put('/observadores_files/{id}', [ObservadorController::class, 'update_with_files']);
         Route::delete('/observadores/{id}', [ObservadorController::class, 'destroy']);
-
-        Route::post('/precipitaciones', [PrecipitacionController::class, 'store']);
-        Route::put('/precipitaciones/{id}', [PrecipitacionController::class, 'update']);
-        Route::delete('/precipitaciones/{id}', [PrecipitacionController::class, 'destroy']);
-
-        Route::post('/eventos-extremos', [EventoExtremoController::class, 'store']);
-        Route::put('/eventos-extremos/{id}', [EventoExtremoController::class, 'update']);
-        Route::delete('/eventos-extremos/{id}', [EventoExtremoController::class, 'destroy']);
     });
 });

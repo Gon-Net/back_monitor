@@ -35,8 +35,11 @@ class AuthController extends Controller
                 ->first();
 
             if ($user) {
-                $token = $user->createToken('token-name')->plainTextToken;
-                return response()->json(['token' => $token], 200);
+                $token = $user->createToken('token-name');
+                //1 semana en dias
+                $token->accessToken->expires_at = now()->addDays(7);
+                $token->accessToken->save();
+                return response()->json(['token' => $token->plainTextToken], 200);
             }
 
             return response()->json(['message' => 'Credenciales inválidas'], 401);

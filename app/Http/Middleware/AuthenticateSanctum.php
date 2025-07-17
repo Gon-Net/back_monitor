@@ -11,7 +11,7 @@ class AuthenticateSanctum extends Middleware
 {
     static function no_logged(){
         return response()->json([
-            'message' => 'Token inválido o no proporcionado',
+            'message' => 'Token inválido, expirado o no proporcionado',
             'error' => 'Unauthenticated'
         ], 401);
     }
